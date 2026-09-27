@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Temp Mail</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg-elev: #111111;
+    --bg-elev-2: #171717;
+    --border: #262626;
+    --border-strong: #404040;
+    --text: #ededed;
+    --text-secondary: #a3a3a3;
+    --text-tertiary: #737373;
+    --accent: #ffffff;
+    --accent-hover: #e5e5e5;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: -0.01em;
+  }
+
+  /* ============ NAVBAR ============ */
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .navbar-inner {
+    max-width: 1120px; margin: 0 auto; padding: 0 32px;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 600; letter-spacing: -0.02em;
+  }
+  .brand-logo { width: 24px; height: 24px; color: var(--text); }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-links a {
+    color: var(--text-secondary); text-decoration: none;
+    padding: 6px 12px; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500; letter-spacing: -0.01em;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--bg-elev); }
+  .nav-links a.active { color: var(--text); background: var(--bg-elev-2); }
+  .nav-links .icon { width: 14px; height: 14px; }
+
+  .status-dot {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; color: var(--text-tertiary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  .status-dot::before {
+    content: ""; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+  }
+  .status-dot.offline::before { background: var(--red); }
+
+  /* ============ CONTAINER ============ */
+  .container {
+    max-width: 1120px; margin: 0 auto;
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  @media (max-width: 900px) {
+    .container { grid-template-columns: 1fr; padding: 20px; gap: 20px; }
+    .navbar-inner { padding: 0 20px; height: 52px; }
+    .nav-links a { padding: 6px 10px; font-size: 12px; }
+  }
+
+  .sidebar { position: sticky; top: 88px; }
+  @media (max-width: 900px) { .sidebar { position: static; } }
+
+  /* ============ SECTION ============ */
+  .section-label {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-tertiary);
+    margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: space-between;
+    letter-spacing: 0;
+  }
+  .section-count {
+    font-family: 'SF Mono', 'Monaco', monospace;
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* ============ INPUT ============ */
+  .input-wrap { display: flex; gap: 8px; margin-bottom: 24px; }
+  .input-wrap input {
+    flex: 1; padding: 9px 12px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .input-wrap input:focus { border-color: var(--border-strong); }
+  .input-wrap input::placeholder { color: var(--text-tertiary); }
+
+  .btn {
+    padding: 9px 14px;
+    background: var(--accent); color: var(--bg);
+    border: none; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 600;
+    letter-spacing: -0.01em;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    white-space: nowrap;
+    font-family: inherit;
+  }
+  .btn:hover { background: var(--accent-hover); }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-icon {
+    padding: 0;
+    width: 32px; height: 32px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .btn-icon:hover {
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--bg-elev-2);
+  }
+  .btn-icon.danger:hover {
+    color: var(--red);
+    border-color: var(--red);
+  }
+  .btn-icon svg { width: 14px; height: 14px; }
+
+  /* ============ EMAIL LIST ============ */
+  .email-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .email-item {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 14px;
+    display: flex; align-items: center; gap: 12px;
+    transition: all 0.15s;
+    cursor: pointer;
+  }
+  .email-item:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-elev-2);
+  }
+  .email-item.active {
+    border-color: var(--border-strong);
+    background: var(--bg-elev-2);
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .email-item-body { flex: 1; min-width: 0; }
+  .email-item-address {
+    font-size: 12px; font-weight: 500;
+    color: var(--text);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    margin-bottom: 3px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  .email-item-meta {
+    font-size: 11px; color: var(--text-tertiary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+
+  .email-item-actions {
+    display: flex; gap: 4px;
+    opacity: 0.4; transition: opacity 0.15s;
+  }
+  .email-item:hover .email-item-actions,
+  .email-item.active .email-item-actions { opacity: 1; }
+
+  /* ============ INBOX ============ */
+  .inbox {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    min-height: 500px;
+  }
+
+  .inbox-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; flex-wrap: wrap;
+  }
+  .inbox-title-wrap {
+    display: flex; align-items: center; gap: 10px;
+    min-width: 0; flex: 1;
+  }
+  .inbox-title {
+    font-size: 13px; font-weight: 500;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    color: var(--text);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .inbox-status {
+    font-size: 11px; color: var(--text-tertiary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+    padding: 0 20px 12px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .inbox-status::before {
+    content: ""; width: 5px; height: 5px; border-radius: 50%;
+    background: var(--green);
+  }
+  .inbox-actions { display: flex; gap: 6px; }
+
+  /* ============ MESSAGES ============ */
+  .messages {
+    padding: 8px;
+    display: flex; flex-direction: column; gap: 6px;
+    max-height: 700px; overflow-y: auto;
+  }
+
+  .message {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--bg-elev-2);
+    transition: all 0.15s;
+    overflow: hidden;
+  }
+  .message:hover { border-color: var(--border-strong); }
+
+  .message-head {
+    padding: 14px 16px;
+    cursor: pointer; user-select: none;
+  }
+
+  .message-row {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 12px; margin-bottom: 4px;
+  }
+  .message-from {
+    font-size: 12px; color: var(--text-secondary);
+    font-weight: 500;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    flex: 1;
+  }
+  .message-time {
+    font-size: 11px; color: var(--text-tertiary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+    flex-shrink: 0;
+  }
+  .message-subject {
+    font-size: 13px; color: var(--text);
+    font-weight: 500;
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .message-preview {
+    font-size: 12px; color: var(--text-tertiary);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    line-height: 1.4;
+  }
+
+  .message-body {
+    border-top: 1px solid var(--border);
+    background: #ffffff;
+    display: none;
+  }
+  .message-body.open { display: block; }
+
+  .message-body-content {
+    padding: 24px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1a1a1a;
+    word-break: break-word;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .message-body-content a { color: var(--blue); word-break: break-all; }
+  .message-body-content img { max-width: 100%; height: auto; border-radius: 6px; }
+  .message-body-content pre,
+  .message-body-content code {
+    background: #f5f5f5; padding: 2px 6px; border-radius: 4px;
+    font-family: 'SF Mono', 'Monaco', monospace; font-size: 13px;
+    word-break: break-all; white-space: pre-wrap;
+  }
+  .message-body-content pre { padding: 12px 16px; overflow-x: auto; }
+
+  .msg-loading {
+    padding: 40px 20px;
+    color: var(--text-tertiary);
+    font-size: 12px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    text-align: center;
+  }
+
+  /* ============ EMPTY ============ */
+  .empty {
+    padding: 48px 20px; text-align: center;
+    color: var(--text-tertiary); font-size: 12px;
+  }
+  .empty-icon {
+    margin-bottom: 12px;
+    opacity: 0.4;
+    display: flex; justify-content: center;
+  }
+  .empty-icon svg { width: 32px; height: 32px; }
+
+  .inbox-empty {
+    padding: 100px 20px; text-align: center;
+    color: var(--text-tertiary);
+  }
+  .inbox-empty-icon {
+    margin-bottom: 16px;
+    opacity: 0.2;
+    display: flex; justify-content: center;
+  }
+  .inbox-empty-icon svg { width: 48px; height: 48px; }
+  .inbox-empty-text { font-size: 13px; }
+
+  /* ============ TOAST ============ */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none; z-index: 1000;
+    max-width: 380px;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { color: var(--red); border-color: var(--red); }
+  .toast.success { color: var(--green); border-color: var(--green); }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="brand">
+      <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Panel
+    </div>
+    <div class="nav-links">
+      <a href="/">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Home
+      </a>
+      <a href="/mail.html" class="active">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-10 5L2 7"/>
+        </svg>
+        Mail
+      </a>
+      <a href="/downloader.html">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Downloader
+      </a>
+    </div>
+    <div class="status-dot" id="headerStatus">connecting</div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <aside class="sidebar">
+    <div class="input-wrap">
+      <input type="text" id="emailInput" placeholder="nama-email" maxlength="30" autocomplete="off">
+      <button class="btn" onclick="addEmail()">Tambah</button>
+    </div>
+
+    <div class="section-label">
+      <span>Inbox Saya</span>
+      <span class="section-count" id="emailCount">0</span>
+    </div>
+
+    <div class="email-list" id="emailList">
+      <div class="empty">
+        <div class="empty-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"/>
+            <path d="m22 7-10 5L2 7"/>
+          </svg>
+        </div>
+        Belum ada email
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="inbox" id="inboxPanel">
+      <div class="inbox-header" id="inboxHeader" style="display:none;">
+        <div class="inbox-title-wrap">
+          <div class="inbox-title" id="inboxTitle">—</div>
+        </div>
+        <div class="inbox-actions">
+          <button class="btn-icon" onclick="copyEmail()" title="Copy">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+          </button>
+          <button class="btn-icon" onclick="manualRefresh()" title="Refresh">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 4 23 10 17 10"/>
+              <polyline points="1 20 1 14 7 14"/>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="inbox-status" id="inboxStatus" style="display:none;"></div>
+
+      <div class="messages" id="messages">
+        <div class="inbox-empty">
+          <div class="inbox-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2"/>
+              <path d="m22 7-10 5L2 7"/>
+            </svg>
+          </div>
+          <div class="inbox-empty-text">Pilih email untuk lihat pesan</div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ==============================================================================
+// CONFIG
+// ==============================================================================
+var STORAGE_KEY = 'tempmail_emails';
+var DOMAIN = 'akunlama.com';
+
+var API_LIST = function(email) {
+  return '/api/list?recipient=' + encodeURIComponent(email);
+};
+var API_HTML = function(region, key) {
+  return '/api/html?region=' + encodeURIComponent(region) + '&key=' + encodeURIComponent(key);
+};
+
+// ==============================================================================
+// STATE
+// ==============================================================================
+var emails = [];
+var activeEmail = null;
+var refreshInterval = null;
+var lastMessageIds = {};
+var currentMessages = [];
+
+// ==============================================================================
+// SVG ICONS
+// ==============================================================================
+var SVG = {
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>'
+};
+
+// ==============================================================================
+// STORAGE
+// ==============================================================================
+function loadFromStorage() {
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    emails = raw ? JSON.parse(raw) : [];
+    if (!Array.isArray(emails)) emails = [];
+  } catch(e) { emails = []; }
+}
+
+function saveToStorage() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(emails)); } catch(e) {}
+}
+
+// ==============================================================================
+// TOAST
+// ==============================================================================
+function showToast(msg, type) {
+  var toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = msg;
+  toast.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function() {
+    toast.className = 'toast' + (type ? ' ' + type : '');
+  }, 2500);
+}
+
+// ==============================================================================
+// VALIDASI
+// ==============================================================================
+function isValidName(name) {
+  if (!name || name.length < 2 || name.length > 30) return false;
+  return /^[a-zA-Z0-9._-]+$/.test(name);
+}
+
+// ==============================================================================
+// TAMBAH EMAIL
+// ==============================================================================
+function addEmail() {
+  var input = document.getElementById('emailInput');
+  if (!input) return;
+  var name = input.value.trim().toLowerCase();
+  if (!isValidName(name)) { showToast('Nama harus 2-30 karakter', 'error'); return; }
+  if (emails.find(function(e) { return e.name === name; })) { showToast('Email sudah ada', 'error'); return; }
+  emails.push({ name: name, createdAt: Date.now(), lastCheck: null });
+  saveToStorage();
+  input.value = '';
+  renderEmailList();
+  showToast(name + '@' + DOMAIN + ' ditambahkan', 'success');
+}
+
+// ==============================================================================
+// HAPUS EMAIL
+// ==============================================================================
+function deleteEmail(name, ev) {
+  if (ev) ev.stopPropagation();
+  if (!confirm('Hapus ' + name + '@' + DOMAIN + '?')) return;
+  emails = emails.filter(function(e) { return e.name !== name; });
+  saveToStorage();
+  if (activeEmail === name) {
+    activeEmail = null;
+    stopAutoRefresh();
+    document.getElementById('inboxHeader').style.display = 'none';
+    document.getElementById('inboxStatus').style.display = 'none';
+    document.getElementById('messages').innerHTML =
+      '<div class="inbox-empty"><div class="inbox-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div><div class="inbox-empty-text">Pilih email untuk lihat pesan</div></div>';
+  }
+  renderEmailList();
+  showToast('Email dihapus');
+}
+
+// ==============================================================================
+// BUKA INBOX
+// ==============================================================================
+function openInbox(name) {
+  activeEmail = name;
+  document.getElementById('inboxHeader').style.display = 'flex';
+  document.getElementById('inboxStatus').style.display = 'flex';
+  document.getElementById('inboxTitle').textContent = name + '@' + DOMAIN;
+  renderEmailList();
+  lastMessageIds = {};
+  currentMessages = [];
+  fetchInbox();
+  startAutoRefresh();
+}
+
+// ==============================================================================
+// AUTO REFRESH
+// ==============================================================================
+function startAutoRefresh() {
+  stopAutoRefresh();
+  refreshInterval = setInterval(fetchInbox, 5000);
+}
+function stopAutoRefresh() {
+  if (refreshInterval) { clearInterval(refreshInterval); refreshInterval = null; }
+}
+function manualRefresh() {
+  if (!activeEmail) return;
+  fetchInbox();
+  showToast('Refreshing...');
+}
+
+// ==============================================================================
+// FETCH INBOX
+// ==============================================================================
+function fetchInbox() {
+  if (!activeEmail) return;
+  var fullEmail = activeEmail + '@' + DOMAIN;
+  var url = API_LIST(fullEmail);
+
+  fetch(url)
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(function(data) {
+      if (!Array.isArray(data)) data = [];
+      var parsed = data.map(function(m, idx) {
+        var headers = (m.message && m.message.headers) || {};
+        var ts = m.timestamp ? new Date(m.timestamp * 1000) : null;
+        return {
+          id: (m.storage && m.storage.key) ? m.storage.key : ('msg-' + idx),
+          from: headers.from || 'Unknown',
+          subject: headers.subject || '(no subject)',
+          time: ts ? ts.toLocaleString('id-ID', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }) : '',
+          preview: m.preview || '',
+          storageKey: (m.storage && m.storage.key) ? m.storage.key : null,
+          region: (m.storage && m.storage.region) ? m.storage.region : 'us',
+          loaded: false,
+          body: ''
+        };
+      });
+      var emailData = emails.find(function(e) { return e.name === activeEmail; });
+      if (emailData) { emailData.lastCheck = Date.now(); saveToStorage(); }
+      if (Object.keys(lastMessageIds).length > 0) {
+        var newCount = parsed.filter(function(m) { return !lastMessageIds[m.id]; }).length;
+        if (newCount > 0) showToast(newCount + ' pesan baru', 'success');
+      }
+      parsed.forEach(function(m) { lastMessageIds[m.id] = true; });
+      parsed.forEach(function(newMsg) {
+        var old = currentMessages.find(function(m) { return m.id === newMsg.id; });
+        if (old && old.loaded) { newMsg.loaded = true; newMsg.body = old.body; }
+      });
+      renderMessages(parsed);
+      updateStatusTime();
+    })
+    .catch(function(err) {
+      console.error('Fetch error:', err);
+      document.getElementById('messages').innerHTML =
+        '<div class="inbox-empty"><div class="inbox-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="inbox-empty-text">Gagal memuat: ' + escapeHtml(err.message) + '</div></div>';
+    });
+}
+
+// ==============================================================================
+// RENDER EMAIL LIST
+// ==============================================================================
+function renderEmailList() {
+  var list = document.getElementById('emailList');
+  var countEl = document.getElementById('emailCount');
+  if (!list) return;
+  if (countEl) countEl.textContent = emails.length;
+
+  if (emails.length === 0) {
+    list.innerHTML = '<div class="empty"><div class="empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div>Belum ada email</div>';
+    return;
+  }
+
+  var html = '';
+  emails.forEach(function(e) {
+    var active = e.name === activeEmail ? ' active' : '';
+    html += '<div class="email-item' + active + '" onclick="openInbox(\'' + e.name + '\')">';
+    html += '<div class="email-item-body">';
+    html += '<div class="email-item-address">' + escapeHtml(e.name) + '@' + DOMAIN + '</div>';
+    html += '<div class="email-item-meta">';
+    if (e.lastCheck) html += 'Cek: ' + new Date(e.lastCheck).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    else html += 'Belum dicek';
+    html += '</div></div>';
+    html += '<div class="email-item-actions">';
+    html += '<button class="btn-icon danger" onclick="deleteEmail(\'' + e.name + '\', event)" title="Hapus">' + SVG.trash + '</button>';
+    html += '</div></div>';
+  });
+  list.innerHTML = html;
+}
+
+// ==============================================================================
+// RENDER MESSAGES
+// ==============================================================================
+function renderMessages(messages) {
+  currentMessages = messages;
+  var container = document.getElementById('messages');
+  if (!container) return;
+  if (messages.length === 0) {
+    container.innerHTML = '<div class="inbox-empty"><div class="inbox-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div><div class="inbox-empty-text">Belum ada pesan</div></div>';
+    return;
+  }
+  var html = '';
+  messages.forEach(function(m, i) {
+    var isOpen = m.loaded && m.body;
+    html += '<div class="message">';
+    html += '<div class="message-head" onclick="toggleMessage(' + i + ')">';
+    html += '<div class="message-row">';
+    html += '<div class="message-from">' + escapeHtml(m.from) + '</div>';
+    html += '<div class="message-time">' + escapeHtml(m.time) + '</div>';
+    html += '</div>';
+    html += '<div class="message-subject">' + escapeHtml(m.subject) + '</div>';
+    html += '<div class="message-preview">' + escapeHtml(m.preview.substring(0, 150)) + '</div>';
+    html += '</div>';
+    html += '<div class="message-body' + (isOpen ? ' open' : '') + '" id="body-' + i + '">';
+    if (isOpen) html += '<div class="message-body-content">' + m.body + '</div>';
+    html += '</div>';
+    html += '</div>';
+  });
+  container.innerHTML = html;
+}
+
+// ==============================================================================
+// TOGGLE MESSAGE
+// ==============================================================================
+function toggleMessage(i) {
+  var body = document.getElementById('body-' + i);
+  var msg = currentMessages[i];
+  if (!body || !msg) return;
+  if (body.classList.contains('open')) { body.classList.remove('open'); return; }
+  body.classList.add('open');
+  if (!msg.loaded && msg.storageKey) {
+    body.innerHTML = '<div class="msg-loading">Memuat pesan...</div>';
+    loadMessageBody(i, msg);
+  }
+}
+
+// ==============================================================================
+// LOAD MESSAGE BODY
+// ==============================================================================
+function loadMessageBody(i, msg) {
+  var body = document.getElementById('body-' + i);
+  if (!body) return;
+  var url = API_HTML(msg.region, msg.storageKey);
+  fetch(url)
+    .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(function(html) {
+      msg.body = html; msg.loaded = true;
+      body.innerHTML = '<div class="message-body-content">' + html + '</div>';
+    })
+    .catch(function(err) {
+      console.error('Load body error:', err);
+      body.innerHTML = '<div class="msg-loading" style="color:#ef4444;">Gagal memuat: ' + escapeHtml(err.message) + '</div>';
+    });
+}
+
+// ==============================================================================
+// UTILS
+// ==============================================================================
+function escapeHtml(text) {
+  if (!text) return '';
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function updateStatusTime() {
+  var el = document.getElementById('inboxStatus');
+  if (!el || !activeEmail) return;
+  var e = emails.find(function(x) { return x.name === activeEmail; });
+  if (e && e.lastCheck) el.textContent = 'Auto-refresh 5s · ' + new Date(e.lastCheck).toLocaleTimeString('id-ID');
+}
+
+function copyEmail() {
+  if (!activeEmail) return;
+  var email = activeEmail + '@' + DOMAIN;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(email).then(function() {
+      showToast('Email dicopy', 'success');
+    }).catch(function() { fallbackCopy(email); });
+  } else fallbackCopy(email);
+}
+
+function fallbackCopy(text) {
+  try {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.top = '-9999px';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, 99999);
+    var ok = document.execCommand('copy');
+    document.body.removeChild(ta);
+    if (ok) showToast('Email dicopy', 'success');
+    else window.prompt('Copy manual:', text);
+  } catch(err) { window.prompt('Copy manual:', text); }
+}
+
+function checkHealth() {
+  fetch('/api/health')
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      var el = document.getElementById('headerStatus');
+      if (el) { el.textContent = 'online'; el.classList.remove('offline'); }
+    })
+    .catch(function() {
+      var el = document.getElementById('headerStatus');
+      if (el) { el.textContent = 'offline'; el.classList.add('offline'); }
+    });
+}
+
+// ==============================================================================
+// INIT
+// ==============================================================================
+document.addEventListener('DOMContentLoaded', function() {
+  var input = document.getElementById('emailInput');
+  if (input) input.addEventListener('keypress', function(e) { if (e.key === 'Enter') addEmail(); });
+  loadFromStorage();
+  renderEmailList();
+  checkHealth();
+  setInterval(checkHealth, 60000);
+});
+</script>
+</body>
+</html>
