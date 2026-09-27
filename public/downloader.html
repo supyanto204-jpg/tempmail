@@ -38,55 +38,30 @@
     letter-spacing: -0.01em;
   }
 
-  /* ============ NAVBAR ============ */
+  /* NAVBAR */
   .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 100;
+    position: sticky; top: 0; z-index: 100;
     background: rgba(10, 10, 10, 0.8);
     backdrop-filter: saturate(180%) blur(12px);
     -webkit-backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--border);
   }
   .navbar-inner {
-    max-width: 1120px;
-    margin: 0 auto;
-    padding: 0 32px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 24px;
+    max-width: 1120px; margin: 0 auto; padding: 0 32px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
   }
   .brand {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    letter-spacing: -0.02em;
+    display: flex; align-items: center; gap: 10px;
+    font-size: 14px; font-weight: 600;
   }
-  .brand-logo {
-    width: 24px;
-    height: 24px;
-    color: var(--text);
-  }
-  .nav-links {
-    display: flex;
-    gap: 4px;
-    align-items: center;
-  }
+  .brand-logo { width: 24px; height: 24px; }
+  .nav-links { display: flex; gap: 4px; }
   .nav-links a {
-    color: var(--text-secondary);
-    text-decoration: none;
-    padding: 6px 12px;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 500;
+    color: var(--text-secondary); text-decoration: none;
+    padding: 6px 12px; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500;
     transition: all 0.15s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    display: flex; align-items: center; gap: 6px;
   }
   .nav-links a:hover { color: var(--text); background: var(--bg-elev); }
   .nav-links a.active { color: var(--text); background: var(--bg-elev-2); }
@@ -97,140 +72,73 @@
     .nav-links a { padding: 6px 10px; font-size: 12px; }
   }
 
-  /* ============ CONTAINER ============ */
-  .container {
-    max-width: 640px;
-    margin: 0 auto;
-    padding: 80px 32px 120px;
-  }
-  @media (max-width: 600px) {
-    .container { padding: 48px 20px 80px; }
-  }
+  /* CONTAINER */
+  .container { max-width: 680px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 600px) { .container { padding: 40px 20px 80px; } }
 
-  /* ============ HERO ============ */
-  .hero {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-
+  /* HERO */
+  .hero { text-align: center; margin-bottom: 40px; }
   .hero-icon {
-    width: 64px;
-    height: 64px;
-    margin: 0 auto 20px;
+    width: 64px; height: 64px; margin: 0 auto 20px;
     border-radius: 16px;
     background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 100%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     box-shadow: 0 12px 40px rgba(254, 44, 85, 0.3);
-    position: relative;
-    overflow: hidden;
+    position: relative; overflow: hidden;
   }
   .hero-icon::before {
-    content: "";
-    position: absolute;
-    inset: 0;
+    content: ""; position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent);
   }
-  .hero-icon svg {
-    width: 32px;
-    height: 32px;
-    color: #ffffff;
-    position: relative;
-    z-index: 1;
-  }
+  .hero-icon svg { width: 32px; height: 32px; color: #fff; position: relative; z-index: 1; }
 
-  h1 {
-    font-size: 32px;
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    margin-bottom: 8px;
-  }
-  .subtitle {
-    color: var(--text-secondary);
-    font-size: 14px;
-    max-width: 400px;
-    margin: 0 auto;
-  }
+  h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 8px; }
+  .subtitle { color: var(--text-secondary); font-size: 14px; max-width: 400px; margin: 0 auto; }
 
-  /* ============ INPUT ============ */
+  /* INPUT */
   .input-card {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 16px;
-    margin-bottom: 24px;
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 16px; margin-bottom: 24px;
   }
-
-  .input-wrap {
-    display: flex;
-    gap: 8px;
-  }
-  @media (max-width: 600px) {
-    .input-wrap { flex-direction: column; }
-  }
+  .input-wrap { display: flex; gap: 8px; }
+  @media (max-width: 600px) { .input-wrap { flex-direction: column; } }
 
   input[type="url"] {
-    flex: 1;
-    padding: 12px 16px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    color: var(--text);
-    font-size: 13px;
-    font-family: 'SF Mono', 'Monaco', monospace;
-    outline: none;
-    transition: border-color 0.15s;
+    flex: 1; padding: 12px 16px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-md); color: var(--text);
+    font-size: 13px; font-family: 'SF Mono', 'Monaco', monospace;
+    outline: none; transition: border-color 0.15s;
   }
   input[type="url"]:focus { border-color: var(--border-strong); }
   input[type="url"]::placeholder { color: var(--text-tertiary); }
 
   .btn {
-    padding: 12px 20px;
-    background: var(--accent);
-    color: var(--bg);
-    border: none;
-    border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
+    padding: 12px 20px; background: var(--accent); color: var(--bg);
+    border: none; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 600; cursor: pointer;
     transition: all 0.15s;
-    white-space: nowrap;
-    font-family: inherit;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    white-space: nowrap; font-family: inherit;
   }
   .btn:hover { background: var(--accent-hover); }
   .btn:active { transform: scale(0.97); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn svg { width: 14px; height: 14px; }
 
-  /* ============ QUICK HELP ============ */
+  /* HELP */
   .help-text {
-    font-size: 12px;
-    color: var(--text-tertiary);
-    margin-top: 12px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
+    font-size: 12px; color: var(--text-tertiary);
+    margin-top: 12px; display: flex; align-items: center; gap: 6px;
     font-family: 'SF Mono', 'Monaco', monospace;
   }
-  .help-text svg {
-    width: 12px;
-    height: 12px;
-    flex-shrink: 0;
-  }
+  .help-text svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-  /* ============ RESULT ============ */
+  /* RESULT */
   .result {
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    display: none;
-    animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--bg-elev); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px;
+    display: none; animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .result.show { display: block; }
 
@@ -240,93 +148,50 @@
   }
 
   .result-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 12px;
-    flex-wrap: wrap;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
   }
   .result-title {
-    font-size: 14px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 0;
-    flex: 1;
+    font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+    min-width: 0; flex: 1;
   }
-  .result-title svg {
-    width: 16px;
-    height: 16px;
-    color: var(--green);
-    flex-shrink: 0;
-  }
+  .result-title svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
   .result-title-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    font-weight: 500;
-    color: var(--text);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    font-weight: 500; color: var(--text);
   }
   .result-status {
-    font-size: 11px;
-    color: var(--text-tertiary);
+    font-size: 11px; color: var(--text-tertiary);
     font-family: 'SF Mono', 'Monaco', monospace;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 3px 8px;
-    background: var(--bg);
-    border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    padding: 3px 8px; background: var(--bg); border-radius: 4px;
     flex-shrink: 0;
   }
 
-  /* ============ AUTHOR INFO ============ */
+  /* AUTHOR INFO */
   .author-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    margin-bottom: 16px;
-    font-size: 12px;
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: var(--radius-md);
+    margin-bottom: 16px; font-size: 12px;
     color: var(--text-secondary);
     font-family: 'SF Mono', 'Monaco', monospace;
   }
-  .author-info svg {
-    width: 14px;
-    height: 14px;
-    color: var(--text-tertiary);
-    flex-shrink: 0;
-  }
-  .author-info-sep {
-    color: var(--text-tertiary);
-  }
+  .author-info svg { width: 14px; height: 14px; color: var(--text-tertiary); flex-shrink: 0; }
+  .author-info-sep { color: var(--text-tertiary); }
 
-  /* ============ DOWNLOAD BUTTONS ============ */
-  .download-links {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+  /* DOWNLOAD LINKS */
+  .download-links { display: flex; flex-direction: column; gap: 8px; }
 
   .download-btn {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     padding: 14px 16px;
-    background: var(--bg);
-    border: 1px solid var(--border);
+    background: var(--bg); border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    text-decoration: none;
-    color: var(--text);
-    font-size: 13px;
-    transition: all 0.15s;
-    gap: 12px;
-    cursor: pointer;
-    font-family: inherit;
+    text-decoration: none; color: var(--text);
+    font-size: 13px; transition: all 0.15s; gap: 12px;
+    cursor: pointer; font-family: inherit;
   }
   .download-btn:hover {
     border-color: var(--border-strong);
@@ -335,35 +200,18 @@
   .download-btn:active { transform: scale(0.99); }
 
   .download-btn-label {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 500;
-    flex: 1;
-    min-width: 0;
+    display: flex; align-items: center; gap: 12px;
+    font-weight: 500; flex: 1; min-width: 0;
   }
-  .download-btn-label svg {
-    width: 18px;
-    height: 18px;
-    color: var(--text-secondary);
-    flex-shrink: 0;
-  }
-  .download-btn-text {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
+  .download-btn-label svg { width: 18px; height: 18px; color: var(--text-secondary); flex-shrink: 0; }
+  .download-btn-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
   .download-btn-badge {
-    font-size: 10px;
-    padding: 3px 8px;
-    background: var(--bg-elev-2);
-    border-radius: 4px;
+    font-size: 10px; padding: 3px 8px;
+    background: var(--bg-elev-2); border-radius: 4px;
     color: var(--text-tertiary);
     font-family: 'SF Mono', 'Monaco', monospace;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
     flex-shrink: 0;
   }
   .download-btn-badge.mp4 { color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
@@ -371,31 +219,113 @@
   .download-btn-badge.img { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
 
   .download-btn-arrow {
-    width: 16px;
-    height: 16px;
-    color: var(--text-tertiary);
+    width: 16px; height: 16px;
+    color: var(--text-tertiary); transition: all 0.15s; flex-shrink: 0;
+  }
+  .download-btn:hover .download-btn-arrow {
+    color: var(--text); transform: translateX(2px);
+  }
+
+  /* ENHANCE PANEL */
+  .enhance-panel {
+    margin-top: 16px; padding: 16px;
+    background: var(--bg); border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+  }
+  .enhance-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 12px;
+  }
+  .enhance-title {
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .enhance-title svg { width: 16px; height: 16px; color: #fbbf24; }
+
+  .switch {
+    position: relative; width: 40px; height: 22px;
+    background: var(--border); border-radius: 100px;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .switch.on { background: var(--green); }
+  .switch::after {
+    content: ""; position: absolute;
+    top: 2px; left: 2px;
+    width: 18px; height: 18px;
+    background: #fff; border-radius: 50%;
+    transition: all 0.2s;
+  }
+  .switch.on::after { left: 20px; }
+
+  .enhance-options {
+    display: none;
+    flex-direction: column; gap: 8px;
+    margin-top: 12px; padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .enhance-options.show { display: flex; }
+
+  .enhance-option {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .enhance-option:hover { border-color: var(--border-strong); }
+  .enhance-option-label {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--text-secondary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  .enhance-option-label span:last-child { color: var(--text); font-family: inherit; }
+
+  .checkbox {
+    width: 18px; height: 18px;
+    border: 2px solid var(--border-strong);
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: center;
     transition: all 0.15s;
     flex-shrink: 0;
   }
-  .download-btn:hover .download-btn-arrow {
-    color: var(--text);
-    transform: translateX(2px);
+  .enhance-option.on .checkbox {
+    background: var(--green); border-color: var(--green);
   }
+  .enhance-option .checkbox svg {
+    width: 12px; height: 12px;
+    color: #fff; opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .enhance-option.on .checkbox svg { opacity: 1; }
 
-  /* ============ LOADING ============ */
+  .enhance-apply {
+    margin-top: 12px;
+    padding: 12px;
+    background: linear-gradient(135deg, var(--pink) 0%, var(--cyan) 100%);
+    color: #000; border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer; transition: all 0.15s;
+    font-family: inherit;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .enhance-apply:hover { opacity: 0.9; }
+  .enhance-apply:active { transform: scale(0.98); }
+  .enhance-apply:disabled { opacity: 0.5; cursor: not-allowed; }
+  .enhance-apply svg { width: 14px; height: 14px; }
+
+  /* LOADING */
   .loading-state {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    padding: 40px 20px;
-    color: var(--text-tertiary);
-    font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; padding: 40px 20px;
+    color: var(--text-tertiary); font-size: 13px;
     font-family: 'SF Mono', 'Monaco', monospace;
   }
   .spinner {
-    width: 16px;
-    height: 16px;
+    width: 16px; height: 16px;
     border: 2px solid var(--border);
     border-top-color: var(--text);
     border-radius: 50%;
@@ -403,50 +333,37 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ============ ERROR ============ */
+  /* ERROR */
   .error-box {
     padding: 14px;
     background: rgba(239, 68, 68, 0.08);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: var(--radius-md);
-    color: #fca5a5;
-    font-size: 13px;
-    display: flex;
-    gap: 10px;
-    align-items: flex-start;
+    color: #fca5a5; font-size: 13px;
+    display: flex; gap: 10px; align-items: flex-start;
   }
-  .error-box svg {
-    width: 16px;
-    height: 16px;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
+  .error-box svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
   .error-box-content { flex: 1; min-width: 0; line-height: 1.5; }
 
-  /* ============ TOAST ============ */
+  /* TOAST */
   .toast {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
+    position: fixed; bottom: 24px; right: 24px;
     background: var(--bg-elev-2);
     border: 1px solid var(--border-strong);
     color: var(--text);
     padding: 12px 16px;
     border-radius: var(--radius-md);
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 13px; font-weight: 500;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
-    opacity: 0;
-    transform: translateY(12px);
-    transition: all 0.2s;
-    pointer-events: none;
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.2s; pointer-events: none;
     z-index: 1000;
   }
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.error { color: var(--red); border-color: var(--red); }
   .toast.success { color: var(--green); border-color: var(--green); }
 
-  /* ============ SCROLLBAR ============ */
+  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -494,7 +411,6 @@
 </nav>
 
 <div class="container">
-
   <div class="hero">
     <div class="hero-icon">
       <svg viewBox="0 0 24 24" fill="currentColor">
@@ -502,7 +418,7 @@
       </svg>
     </div>
     <h1>TikTok Downloader</h1>
-    <p class="subtitle">Paste link TikTok, download video tanpa watermark.</p>
+    <p class="subtitle">Paste link TikTok, download video HD atau foto dengan enhancement.</p>
   </div>
 
   <div class="input-card">
@@ -523,7 +439,7 @@
         <line x1="12" y1="16" x2="12" y2="12"/>
         <line x1="12" y1="8" x2="12.01" y2="8"/>
       </svg>
-      Support: video, foto slideshow, audio
+      Support: video HD, foto slideshow, audio
     </div>
   </div>
 
@@ -537,6 +453,7 @@
 // STATE
 // ==============================================================================
 var isDownloading = false;
+var currentData = null;
 
 // ==============================================================================
 // ICONS
@@ -549,7 +466,9 @@ var ICONS = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
   error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
   user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>',
+  checkSmall: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
 };
 
 // ==============================================================================
@@ -557,20 +476,12 @@ var ICONS = {
 // ==============================================================================
 function showToast(msg, type) {
   var toast = document.getElementById('toast');
-  if (!toast) return;
   toast.textContent = msg;
   toast.className = 'toast show' + (type ? ' ' + type : '');
   clearTimeout(toast._t);
   toast._t = setTimeout(function() {
     toast.className = 'toast' + (type ? ' ' + type : '');
   }, 2500);
-}
-
-// ==============================================================================
-// VALIDASI URL TIKTOK
-// ==============================================================================
-function isTikTokUrl(url) {
-  return /tiktok\.com|vt\.tiktok|vm\.tiktok/i.test(url);
 }
 
 // ==============================================================================
@@ -582,19 +493,9 @@ function startDownload() {
   var input = document.getElementById('urlInput');
   var url = input.value.trim();
 
-  if (!url) {
-    showToast('Masukkan URL TikTok dulu', 'error');
-    input.focus();
-    return;
-  }
-  if (!/^https?:\/\//i.test(url)) {
-    showToast('URL harus mulai dengan http:// atau https://', 'error');
-    return;
-  }
-  if (!isTikTokUrl(url)) {
-    showToast('Harus link TikTok', 'error');
-    return;
-  }
+  if (!url) { showToast('Masukkan URL TikTok dulu', 'error'); input.focus(); return; }
+  if (!/^https?:\/\//i.test(url)) { showToast('URL harus mulai dengan http:// atau https://', 'error'); return; }
+  if (!/tiktok\.com|vt\.tiktok|vm\.tiktok/i.test(url)) { showToast('Harus link TikTok', 'error'); return; }
 
   isDownloading = true;
   var btn = document.getElementById('dlBtn');
@@ -609,11 +510,12 @@ function startDownload() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.error) showError(data.error);
-      else renderResult(data);
+      else {
+        currentData = data;
+        renderResult(data);
+      }
     })
-    .catch(function(err) {
-      showError(err.message);
-    })
+    .catch(function(err) { showError(err.message); })
     .finally(function() {
       isDownloading = false;
       btn.disabled = false;
@@ -632,66 +534,188 @@ function renderResult(data) {
   html += '<div class="result-header">';
   html += '<div class="result-title">';
   html += ICONS.check;
-  html += '<span class="result-title-text">' + escapeHtml(data.title || 'TikTok Video') + '</span>';
+  html += '<span class="result-title-text">' + escapeHtml(data.title || 'TikTok Media') + '</span>';
   html += '</div>';
-  html += '<div class="result-status">TIKTOK</div>';
+  html += '<div class="result-status">' + (data.isPhotoPost ? 'SLIDESHOW' : 'VIDEO') + '</div>';
   html += '</div>';
 
   // Author info
   if (data.author || data.duration) {
     html += '<div class="author-info">';
-    if (data.author) {
-      html += ICONS.user;
-      html += '<span>' + escapeHtml(data.author) + '</span>';
-    }
-    if (data.author && data.duration) {
-      html += '<span class="author-info-sep">·</span>';
-    }
-    if (data.duration) {
-      html += ICONS.clock;
-      html += '<span>' + escapeHtml(data.duration) + '</span>';
-    }
+    if (data.author) { html += ICONS.user + '<span>' + escapeHtml(data.author) + '</span>'; }
+    if (data.author && data.duration) html += '<span class="author-info-sep">·</span>';
+    if (data.duration) { html += ICONS.clock + '<span>' + escapeHtml(data.duration) + '</span>'; }
     html += '</div>';
   }
 
-  // Download buttons
+  // Download links
   var links = data.links || [];
-
   if (links.length === 0) {
-    html += '<div class="error-box">';
-    html += ICONS.error;
-    html += '<div class="error-box-content">Gak ada link download.</div>';
-    html += '</div>';
+    html += '<div class="error-box">' + ICONS.error + '<div class="error-box-content">Gak ada link download.</div></div>';
   } else {
     html += '<div class="download-links">';
-    links.forEach(function(l) {
-      html += renderDownloadButton(l);
-    });
+    links.forEach(function(l) { html += renderDownloadButton(l); });
     html += '</div>';
+  }
+
+  // Enhance panel (kalau ada video atau foto)
+  var mediaUrl = data.isPhotoPost ? (data.imageUrls[0] || null) : data.videoUrl;
+  var mediaType = data.isPhotoPost ? 'photo' : 'video';
+
+  if (mediaUrl) {
+    html += renderEnhancePanel(mediaUrl, mediaType);
   }
 
   result.innerHTML = html;
+
+  // Setup event listener enhance
+  setupEnhanceHandlers();
 }
 
 // ==============================================================================
-// RENDER 1 DOWNLOAD BUTTON
+// RENDER DOWNLOAD BUTTON
 // ==============================================================================
 function renderDownloadButton(l) {
   var type = (l.type || 'FILE').toUpperCase();
   var icon = getIconForType(type);
   var badgeClass = type.toLowerCase();
 
+  return '<a class="download-btn" href="' + escapeAttr(l.url) + '" target="_blank" rel="noopener">' +
+    '<span class="download-btn-label">' + icon +
+    '<span class="download-btn-text">' + escapeHtml(l.label || 'Download') + '</span></span>' +
+    '<span class="download-btn-badge ' + badgeClass + '">' + escapeHtml(type) + '</span>' +
+    ICONS.arrow +
+    '</a>';
+}
+
+// ==============================================================================
+// RENDER ENHANCE PANEL
+// ==============================================================================
+function renderEnhancePanel(mediaUrl, mediaType) {
+  var isVideo = mediaType === 'video';
+
   var html = '';
-  html += '<a class="download-btn" href="' + escapeAttr(l.url) + '" target="_blank" rel="noopener">';
-  html += '<span class="download-btn-label">';
-  html += icon;
-  html += '<span class="download-btn-text">' + escapeHtml(l.label || 'Download') + '</span>';
-  html += '</span>';
-  html += '<span class="download-btn-badge ' + badgeClass + '">' + escapeHtml(type) + '</span>';
-  html += ICONS.arrow;
-  html += '</a>';
+  html += '<div class="enhance-panel">';
+  html += '<div class="enhance-header">';
+  html += '<div class="enhance-title">' + ICONS.sparkle + 'Enhance ' + (isVideo ? 'Video' : 'Foto') + '</div>';
+  html += '<div class="switch" id="enhanceSwitch" onclick="toggleEnhance()"></div>';
+  html += '</div>';
+
+  html += '<div class="enhance-options" id="enhanceOptions">';
+
+  // Options
+  var opts = isVideo
+    ? [
+        { id: 'upscale', label: 'Upscale 2x', desc: 'Perbesar resolusi pake Lanczos', default: true },
+        { id: 'sharpen', label: 'Sharpen', desc: 'Pertajam detail', default: true },
+        { id: 'denoise', label: 'Denoise', desc: 'Kurangi noise', default: false },
+        { id: 'fps60', label: 'FPS 60', desc: 'Interpolate ke 60 FPS', default: false },
+        { id: 'hdr', label: 'HDR Tone', desc: 'Tone mapping HDR', default: false }
+      ]
+    : [
+        { id: 'upscale', label: 'Upscale 2x', desc: 'Perbesar resolusi', default: true },
+        { id: 'sharpen', label: 'Sharpen', desc: 'Pertajam detail', default: true },
+        { id: 'denoise', label: 'Denoise', desc: 'Kurangi noise', default: true },
+        { id: 'hdr', label: 'HDR Tone', desc: 'Tone mapping HDR', default: false }
+      ];
+
+  opts.forEach(function(o) {
+    html += '<div class="enhance-option' + (o.default ? ' on' : '') + '" data-option="' + o.id + '" onclick="toggleOption(this)">';
+    html += '<div class="enhance-option-label"><span>' + o.label + '</span></div>';
+    html += '<div class="checkbox">' + ICONS.checkSmall + '</div>';
+    html += '</div>';
+  });
+
+  html += '<button class="enhance-apply" id="enhanceApply" onclick="applyEnhance(\'' + escapeAttr(mediaUrl) + '\', \'' + mediaType + '\')">';
+  html += ICONS.sparkle;
+  html += 'Enhance Sekarang';
+  html += '</button>';
+
+  html += '</div>';
+  html += '</div>';
 
   return html;
+}
+
+// ==============================================================================
+// TOGGLE ENHANCE PANEL
+// ==============================================================================
+function toggleEnhance() {
+  var sw = document.getElementById('enhanceSwitch');
+  var opts = document.getElementById('enhanceOptions');
+  sw.classList.toggle('on');
+  opts.classList.toggle('show');
+}
+
+function toggleOption(el) {
+  el.classList.toggle('on');
+}
+
+// ==============================================================================
+// APPLY ENHANCE
+// ==============================================================================
+function applyEnhance(mediaUrl, mediaType) {
+  var btn = document.getElementById('enhanceApply');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div>Processing...';
+
+  // Kumpulin opsi
+  var options = {};
+  document.querySelectorAll('.enhance-option').forEach(function(el) {
+    var key = el.getAttribute('data-option');
+    options[key] = el.classList.contains('on');
+  });
+
+  // Tampilin progress
+  var result = document.getElementById('result');
+  var progressId = 'enhance-progress-' + Date.now();
+  result.insertAdjacentHTML('beforeend',
+    '<div id="' + progressId + '" style="margin-top:16px;padding:16px;background:#111;border:1px solid #262626;border-radius:12px;">' +
+    '<div class="loading-state"><div class="spinner"></div>Enhancing... (bisa 1-5 menit tergantung size)</div>' +
+    '</div>'
+  );
+
+  fetch('/api/enhance', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ url: mediaUrl, type: mediaType, options: options })
+  })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      var el = document.getElementById(progressId);
+      if (data.error) {
+        el.innerHTML = '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(data.error) + '</div></div>';
+      } else {
+        el.innerHTML = '<a class="download-btn" href="' + data.url + '" target="_blank" rel="noopener">' +
+          '<span class="download-btn-label">' + ICONS.check +
+          '<span class="download-btn-text">Download Enhanced</span></span>' +
+          '<span class="download-btn-badge" style="color:#22c55e;background:rgba(34,197,94,0.1)">ENHANCED</span>' +
+          ICONS.arrow + '</a>';
+        showToast('Enhance berhasil!', 'success');
+      }
+      btn.disabled = false;
+      btn.innerHTML = ICONS.sparkle + 'Enhance Sekarang';
+    })
+    .catch(function(err) {
+      var el = document.getElementById(progressId);
+      el.innerHTML = '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(err.message) + '</div></div>';
+      btn.disabled = false;
+      btn.innerHTML = ICONS.sparkle + 'Enhance Sekarang';
+    });
+}
+
+// ==============================================================================
+// SETUP ENHANCE HANDLERS
+// ==============================================================================
+function setupEnhanceHandlers() {
+  // Auto-open enhance panel kalau media ada
+  var sw = document.getElementById('enhanceSwitch');
+  if (sw) {
+    // Default: show options
+    sw.classList.add('on');
+    var opts = document.getElementById('enhanceOptions');
+    if (opts) opts.classList.add('show');
+  }
 }
 
 // ==============================================================================
@@ -711,21 +735,9 @@ function getIconForType(type) {
 function showError(msg) {
   var result = document.getElementById('result');
   result.classList.add('show');
-
-  var html = '';
-  html += '<div class="result-header">';
-  html += '<div class="result-title" style="color:#fca5a5;">';
-  html += ICONS.error;
-  html += 'Gagal';
-  html += '</div>';
-  html += '</div>';
-
-  html += '<div class="error-box">';
-  html += ICONS.error;
-  html += '<div class="error-box-content">' + escapeHtml(msg) + '</div>';
-  html += '</div>';
-
-  result.innerHTML = html;
+  result.innerHTML =
+    '<div class="result-header"><div class="result-title" style="color:#fca5a5;">' + ICONS.error + 'Gagal</div></div>' +
+    '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(msg) + '</div></div>';
 }
 
 // ==============================================================================
@@ -733,12 +745,7 @@ function showError(msg) {
 // ==============================================================================
 function escapeHtml(text) {
   if (!text) return '';
-  return String(text)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
 function escapeAttr(text) {
@@ -752,9 +759,7 @@ function escapeAttr(text) {
 document.addEventListener('DOMContentLoaded', function() {
   var input = document.getElementById('urlInput');
   if (input) {
-    input.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') startDownload();
-    });
+    input.addEventListener('keypress', function(e) { if (e.key === 'Enter') startDownload(); });
     input.focus();
   }
 });
