@@ -22,7 +22,6 @@
     --cyan: #25f4ee;
     --green: #22c55e;
     --red: #ef4444;
-    --yellow: #fbbf24;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
@@ -39,6 +38,7 @@
     position: sticky; top: 0; z-index: 100;
     background: rgba(10, 10, 10, 0.8);
     backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--border);
   }
   .navbar-inner {
@@ -53,18 +53,15 @@
     padding: 6px 12px; border-radius: var(--radius-md);
     font-size: 13px; font-weight: 500;
     transition: all 0.15s;
-    display: flex; align-items: center; gap: 6px;
   }
   .nav-links a:hover { color: var(--text); background: var(--bg-elev); }
   .nav-links a.active { color: var(--text); background: var(--bg-elev-2); }
-  .nav-links .icon { width: 14px; height: 14px; }
-
   @media (max-width: 600px) {
     .navbar-inner { padding: 0 20px; height: 52px; }
     .nav-links a { padding: 6px 10px; font-size: 12px; }
   }
 
-  .container { max-width: 680px; margin: 0 auto; padding: 64px 32px 120px; }
+  .container { max-width: 640px; margin: 0 auto; padding: 64px 32px 120px; }
   @media (max-width: 600px) { .container { padding: 40px 20px 80px; } }
 
   .hero { text-align: center; margin-bottom: 40px; }
@@ -199,87 +196,12 @@
   .download-btn-badge.mp4 { color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
   .download-btn-badge.mp3 { color: #a78bfa; background: rgba(167, 139, 250, 0.1); }
   .download-btn-badge.img { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
-  .download-btn-badge.enhanced { color: var(--green); background: rgba(34, 197, 94, 0.1); }
 
   .download-btn-arrow {
     width: 16px; height: 16px;
     color: var(--text-tertiary); transition: all 0.15s; flex-shrink: 0;
   }
   .download-btn:hover .download-btn-arrow { color: var(--text); transform: translateX(2px); }
-
-  .enhance-panel {
-    margin-top: 16px; padding: 16px;
-    background: var(--bg); border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-  }
-  .enhance-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
-  }
-  .enhance-title {
-    font-size: 13px; font-weight: 600;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .enhance-title svg { width: 16px; height: 16px; color: var(--yellow); }
-
-  .switch {
-    position: relative; width: 40px; height: 22px;
-    background: var(--border); border-radius: 100px;
-    cursor: pointer; transition: all 0.2s;
-  }
-  .switch.on { background: var(--green); }
-  .switch::after {
-    content: ""; position: absolute;
-    top: 2px; left: 2px;
-    width: 18px; height: 18px;
-    background: #fff; border-radius: 50%;
-    transition: all 0.2s;
-  }
-  .switch.on::after { left: 20px; }
-
-  .enhance-options {
-    display: none; flex-direction: column; gap: 8px;
-    margin-top: 12px; padding-top: 12px;
-    border-top: 1px solid var(--border);
-  }
-  .enhance-options.show { display: flex; }
-
-  .enhance-option {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px; background: var(--bg-elev);
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
-    font-size: 12px; cursor: pointer; transition: all 0.15s;
-  }
-  .enhance-option:hover { border-color: var(--border-strong); }
-  .enhance-option-label {
-    display: flex; align-items: center; gap: 8px;
-    color: var(--text-secondary);
-  }
-  .enhance-option-label span:last-child { color: var(--text); }
-
-  .checkbox {
-    width: 18px; height: 18px;
-    border: 2px solid var(--border-strong);
-    border-radius: 4px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s; flex-shrink: 0;
-  }
-  .enhance-option.on .checkbox { background: var(--green); border-color: var(--green); }
-  .enhance-option .checkbox svg { width: 12px; height: 12px; color: #fff; opacity: 0; transition: opacity 0.15s; }
-  .enhance-option.on .checkbox svg { opacity: 1; }
-
-  .enhance-apply {
-    margin-top: 12px; padding: 12px;
-    background: linear-gradient(135deg, var(--pink) 0%, var(--cyan) 100%);
-    color: #000; border: none; border-radius: var(--radius-md);
-    font-weight: 600; font-size: 13px;
-    cursor: pointer; transition: all 0.15s; font-family: inherit;
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-  }
-  .enhance-apply:hover { opacity: 0.9; }
-  .enhance-apply:active { transform: scale(0.98); }
-  .enhance-apply:disabled { opacity: 0.5; cursor: not-allowed; }
-  .enhance-apply svg { width: 14px; height: 14px; }
 
   .loading-state {
     display: flex; align-items: center; justify-content: center;
@@ -355,7 +277,7 @@
       </svg>
     </div>
     <h1>TikTok Downloader</h1>
-    <p class="subtitle">Paste link TikTok, download HD atau enhance dengan AI.</p>
+    <p class="subtitle">Paste link TikTok — video HD tanpa watermark, atau foto slideshow.</p>
   </div>
 
   <div class="input-card">
@@ -376,7 +298,7 @@
         <line x1="12" y1="16" x2="12" y2="12"/>
         <line x1="12" y1="8" x2="12.01" y2="8"/>
       </svg>
-      Video HD, foto slideshow, audio, enhance
+      Video HD no watermark · Foto slideshow · Audio
     </div>
   </div>
 
@@ -386,25 +308,8 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ==============================================================================
-// ⚠️ CONFIG — GANTI DENGAN URL PANEL LU
-// ==============================================================================
-var PANEL_URL = 'https://panel-lu.pterodactyl.io'; // ganti!
-var PANEL_API_KEY = ''; // kosongin kalau gak butuh auth
-
-// Kalau panel gak punya HTTPS, atau lu mau pakai Vercel proxy, kosongin PANEL_URL
-// nanti otomatis pakai /api/enhance (Vercel)
-var USE_VERCEL_PROXY = false; // true = lewat Vercel, false = langsung ke panel
-
-// ==============================================================================
-// STATE
-// ==============================================================================
 var isDownloading = false;
-var currentData = null;
 
-// ==============================================================================
-// ICONS
-// ==============================================================================
 var ICONS = {
   video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
   audio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
@@ -413,14 +318,9 @@ var ICONS = {
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
   error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
   user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
-  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
-  sparkle: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg>',
-  checkSmall: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>'
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
 };
 
-// ==============================================================================
-// TOAST
-// ==============================================================================
 function showToast(msg, type) {
   var toast = document.getElementById('toast');
   toast.textContent = msg;
@@ -429,9 +329,6 @@ function showToast(msg, type) {
   toast._t = setTimeout(function() { toast.className = 'toast' + (type ? ' ' + type : ''); }, 2500);
 }
 
-// ==============================================================================
-// START DOWNLOAD
-// ==============================================================================
 function startDownload() {
   if (isDownloading) return;
   var input = document.getElementById('urlInput');
@@ -454,7 +351,7 @@ function startDownload() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.error) showError(data.error);
-      else { currentData = data; renderResult(data); }
+      else renderResult(data);
     })
     .catch(function(err) { showError(err.message); })
     .finally(function() {
@@ -464,16 +361,13 @@ function startDownload() {
     });
 }
 
-// ==============================================================================
-// RENDER RESULT
-// ==============================================================================
 function renderResult(data) {
   var result = document.getElementById('result');
   var html = '';
 
   html += '<div class="result-header">';
   html += '<div class="result-title">' + ICONS.check + '<span class="result-title-text">' + escapeHtml(data.title || 'TikTok Media') + '</span></div>';
-  html += '<div class="result-status">' + (data.isPhotoPost ? 'SLIDESHOW' : 'VIDEO') + '</div>';
+  html += '<div class="result-status">' + (data.isPhotoPost ? 'SLIDESHOW (' + data.totalPhotos + ' FOTO)' : 'VIDEO') + '</div>';
   html += '</div>';
 
   if (data.author || data.duration) {
@@ -489,17 +383,13 @@ function renderResult(data) {
     html += '<div class="error-box">' + ICONS.error + '<div class="error-box-content">Gak ada link download.</div></div>';
   } else {
     html += '<div class="download-links">';
-    links.forEach(function(l) { html += renderDownloadButton(l); });
+    links.forEach(function(l) {
+      html += renderDownloadButton(l);
+    });
     html += '</div>';
   }
 
-  var mediaUrl = data.isPhotoPost ? (data.imageUrls[0] || null) : data.videoUrl;
-  var mediaType = data.isPhotoPost ? 'photo' : 'video';
-
-  if (mediaUrl) html += renderEnhancePanel(mediaUrl, mediaType);
-
   result.innerHTML = html;
-  setupEnhanceHandlers();
 }
 
 function renderDownloadButton(l) {
@@ -509,127 +399,6 @@ function renderDownloadButton(l) {
     '<span class="download-btn-label">' + icon + '<span class="download-btn-text">' + escapeHtml(l.label || 'Download') + '</span></span>' +
     '<span class="download-btn-badge ' + type.toLowerCase() + '">' + escapeHtml(type) + '</span>' +
     ICONS.arrow + '</a>';
-}
-
-function renderEnhancePanel(mediaUrl, mediaType) {
-  var isVideo = mediaType === 'video';
-  var html = '';
-  html += '<div class="enhance-panel">';
-  html += '<div class="enhance-header">';
-  html += '<div class="enhance-title">' + ICONS.sparkle + 'Enhance ' + (isVideo ? 'Video' : 'Foto') + '</div>';
-  html += '<div class="switch" id="enhanceSwitch" onclick="toggleEnhance()"></div>';
-  html += '</div>';
-  html += '<div class="enhance-options" id="enhanceOptions">';
-
-  var opts = isVideo
-    ? [
-        { id: 'upscale', label: 'Upscale 2x', default: true },
-        { id: 'sharpen', label: 'Sharpen', default: true },
-        { id: 'denoise', label: 'Denoise', default: false },
-        { id: 'fps60', label: 'FPS 60', default: false },
-        { id: 'hdr', label: 'HDR Tone', default: false }
-      ]
-    : [
-        { id: 'upscale', label: 'Upscale 2x', default: true },
-        { id: 'sharpen', label: 'Sharpen', default: true },
-        { id: 'denoise', label: 'Denoise', default: true },
-        { id: 'hdr', label: 'HDR Tone', default: false }
-      ];
-
-  opts.forEach(function(o) {
-    html += '<div class="enhance-option' + (o.default ? ' on' : '') + '" data-option="' + o.id + '" onclick="toggleOption(this)">';
-    html += '<div class="enhance-option-label"><span>' + o.label + '</span></div>';
-    html += '<div class="checkbox">' + ICONS.checkSmall + '</div>';
-    html += '</div>';
-  });
-
-  html += '<button class="enhance-apply" id="enhanceApply" onclick="applyEnhance(\'' + escapeAttr(mediaUrl) + '\', \'' + mediaType + '\')">';
-  html += ICONS.sparkle + 'Enhance Sekarang</button>';
-  html += '</div></div>';
-  return html;
-}
-
-function toggleEnhance() {
-  document.getElementById('enhanceSwitch').classList.toggle('on');
-  document.getElementById('enhanceOptions').classList.toggle('show');
-}
-
-function toggleOption(el) { el.classList.toggle('on'); }
-
-// ==============================================================================
-// APPLY ENHANCE
-// ==============================================================================
-function applyEnhance(mediaUrl, mediaType) {
-  var btn = document.getElementById('enhanceApply');
-  btn.disabled = true;
-  btn.innerHTML = '<div class="spinner"></div>Processing...';
-
-  var options = {};
-  document.querySelectorAll('.enhance-option').forEach(function(el) {
-    options[el.getAttribute('data-option')] = el.classList.contains('on');
-  });
-
-  var result = document.getElementById('result');
-  var progressId = 'enhance-progress-' + Date.now();
-  result.insertAdjacentHTML('beforeend',
-    '<div id="' + progressId + '" style="margin-top:16px;padding:16px;background:#111;border:1px solid #262626;border-radius:12px;">' +
-    '<div class="loading-state"><div class="spinner"></div>Enhancing... (bisa 1-5 menit)</div></div>'
-  );
-
-  // Tentukan URL endpoint
-  var enhanceEndpoint;
-  if (USE_VERCEL_PROXY) {
-    enhanceEndpoint = '/api/enhance'; // lewat Vercel
-  } else {
-    enhanceEndpoint = PANEL_URL + '/api/enhance'; // langsung ke panel
-  }
-
-  console.log('[Enhance] Endpoint:', enhanceEndpoint);
-
-  fetch(enhanceEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'X-API-Key': PANEL_API_KEY
-    },
-    body: JSON.stringify({ url: mediaUrl, type: mediaType, options: options })
-  })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var el = document.getElementById(progressId);
-      if (data.error) {
-        el.innerHTML = '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(data.error) + '</div></div>';
-      } else {
-        // Kalau hasil dari panel, perlu prepend PANEL_URL
-        var downloadUrl = data.url;
-        if (!USE_VERCEL_PROXY && downloadUrl.startsWith('/')) {
-          downloadUrl = PANEL_URL + downloadUrl;
-        }
-
-        el.innerHTML = '<a class="download-btn" href="' + downloadUrl + '" target="_blank" rel="noopener">' +
-          '<span class="download-btn-label">' + ICONS.check + '<span class="download-btn-text">Download Enhanced</span></span>' +
-          '<span class="download-btn-badge enhanced">ENHANCED</span>' +
-          ICONS.arrow + '</a>';
-        showToast('Enhance berhasil!', 'success');
-      }
-      btn.disabled = false;
-      btn.innerHTML = ICONS.sparkle + 'Enhance Sekarang';
-    })
-    .catch(function(err) {
-      var el = document.getElementById(progressId);
-      el.innerHTML = '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(err.message) + '</div></div>';
-      btn.disabled = false;
-      btn.innerHTML = ICONS.sparkle + 'Enhance Sekarang';
-    });
-}
-
-function setupEnhanceHandlers() {
-  var sw = document.getElementById('enhanceSwitch');
-  if (sw) {
-    sw.classList.add('on');
-    var opts = document.getElementById('enhanceOptions');
-    if (opts) opts.classList.add('show');
-  }
 }
 
 function getIconForType(type) {
