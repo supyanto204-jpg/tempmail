@@ -299,7 +299,7 @@
   }
   .message-body.open { display: block; }
 
-  /* ==== BODY MESSAGE DARK THEME (disamakan dengan UI lain) ==== */
+  /* ==== BODY MESSAGE DARK THEME ==== */
   .message-body-content {
     padding: 24px;
     font-size: 14px;
@@ -437,14 +437,14 @@
         </svg>
         Home
       </a>
-      <a href="/mail.html" class="active">
+      <a href="/mail" class="active">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="2" y="4" width="20" height="16" rx="2"/>
           <path d="m22 7-10 5L2 7"/>
         </svg>
         Mail
       </a>
-      <a href="/downloader.html">
+      <a href="/downloader">
         <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
           <polyline points="7 10 12 15 17 10"/>
@@ -548,6 +548,7 @@ var activeEmail = null;
 var refreshInterval = null;
 var lastMessageIds = {};
 var currentMessages = [];
+var pendingCode = null;
 
 // ==============================================================================
 // SVG ICONS
@@ -594,6 +595,43 @@ function isValidName(name) {
 }
 
 // ==============================================================================
+// URL PARSER
+// ==============================================================================
+function parseUrlPath() {
+  // Contoh path: /mail/budi@akunlama.com/abc123
+  var parts = window.location.pathname.split('/').filter(Boolean);
+  if (parts[0] !== 'mail') return null;
+  var emailPart = parts[1] ? decodeURIComponent(parts[1]) : null;
+  var codePart  = parts[2] ? decodeURIComponent(parts[2]) : null;
+  if (!emailPart) return null;
+  var name = emailPart.split('@')[0];
+  return { name: name, code: codePart };
+}
+
+function handleUrlRouting() {
+  var parsed = parseUrlPath();
+  if (!parsed || !parsed.name) return;
+
+  var name = parsed.name;
+  if (!isValidName(name)) return;
+
+  // Pastikan email ada di list, kalau tidak tambahkan otomatis
+  if (!emails.find(function(e) { return e.name === name; })) {
+    emails.push({ name: name, createdAt: Date.now(), lastCheck: null });
+    saveToStorage();
+    renderEmailList();
+  }
+
+  // Buka inbox
+  openInbox(name, { skipUrlUpdate: true });
+
+  // Simpan kode untuk auto-expand setelah pesan dimuat
+  if (parsed.code) {
+    pendingCode = parsed.code;
+  }
+}
+
+// ==============================================================================
 // TAMBAH EMAIL
 // ==============================================================================
 function addEmail() {
@@ -624,6 +662,8 @@ function deleteEmail(name, ev) {
     document.getElementById('inboxStatus').style.display = 'none';
     document.getElementById('messages').innerHTML =
       '<div class="inbox-empty"><div class="inbox-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div><div class="inbox-empty-text">Pilih email untuk lihat pesan</div></div>';
+    // Kembali ke /mail
+    history.pushState({}, '', '/mail');
   }
   renderEmailList();
   showToast('Email dihapus');
@@ -632,12 +672,22 @@ function deleteEmail(name, ev) {
 // ==============================================================================
 // BUKA INBOX
 // ==============================================================================
-function openInbox(name) {
+function openInbox(name, opts) {
+  opts = opts || {};
   activeEmail = name;
   document.getElementById('inboxHeader').style.display = 'flex';
   document.getElementById('inboxStatus').style.display = 'flex';
   document.getElementById('inboxTitle').textContent = name + '@' + DOMAIN;
   renderEmailList();
+
+  // Update URL tanpa reload (kecuali diminta skip)
+  if (!opts.skipUrlUpdate) {
+    var newPath = '/mail/' + encodeURIComponent(name + '@' + DOMAIN);
+    if (window.location.pathname !== newPath) {
+      history.pushState({ email: name }, '', newPath);
+    }
+  }
+
   lastMessageIds = {};
   currentMessages = [];
   fetchInbox();
@@ -687,19 +737,40 @@ function fetchInbox() {
           body: ''
         };
       });
+
       var emailData = emails.find(function(e) { return e.name === activeEmail; });
       if (emailData) { emailData.lastCheck = Date.now(); saveToStorage(); }
+
       if (Object.keys(lastMessageIds).length > 0) {
         var newCount = parsed.filter(function(m) { return !lastMessageIds[m.id]; }).length;
         if (newCount > 0) showToast(newCount + ' pesan baru', 'success');
       }
       parsed.forEach(function(m) { lastMessageIds[m.id] = true; });
+
+      // Preserve body yang sudah di-load
       parsed.forEach(function(newMsg) {
         var old = currentMessages.find(function(m) { return m.id === newMsg.id; });
         if (old && old.loaded) { newMsg.loaded = true; newMsg.body = old.body; }
       });
+
       renderMessages(parsed);
       updateStatusTime();
+
+      // Auto-expand pesan kalau ada pendingCode
+      if (pendingCode) {
+        var idx = parsed.findIndex(function(m) {
+          return m.id === pendingCode || m.storageKey === pendingCode;
+        });
+        if (idx !== -1) {
+          setTimeout(function() {
+            var wasOpen = currentMessages[idx] && currentMessages[idx].loaded;
+            toggleMessage(idx, { skipUrlUpdate: true });
+            var el = document.getElementById('body-' + idx);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 200);
+          pendingCode = null;
+        }
+      }
     })
     .catch(function(err) {
       console.error('Fetch error:', err);
@@ -773,12 +844,30 @@ function renderMessages(messages) {
 // ==============================================================================
 // TOGGLE MESSAGE
 // ==============================================================================
-function toggleMessage(i) {
+function toggleMessage(i, opts) {
+  opts = opts || {};
   var body = document.getElementById('body-' + i);
   var msg = currentMessages[i];
   if (!body || !msg) return;
-  if (body.classList.contains('open')) { body.classList.remove('open'); return; }
+
+  if (body.classList.contains('open')) {
+    body.classList.remove('open');
+    // Update URL balik ke inbox (hapus code)
+    if (activeEmail && !opts.skipUrlUpdate) {
+      var newPath = '/mail/' + encodeURIComponent(activeEmail + '@' + DOMAIN);
+      history.pushState({ email: activeEmail }, '', newPath);
+    }
+    return;
+  }
+
   body.classList.add('open');
+
+  // Update URL dengan code pesan
+  if (activeEmail && msg.id && !opts.skipUrlUpdate) {
+    var newPath = '/mail/' + encodeURIComponent(activeEmail + '@' + DOMAIN) + '/' + encodeURIComponent(msg.id);
+    history.pushState({ email: activeEmail, code: msg.id }, '', newPath);
+  }
+
   if (!msg.loaded && msg.storageKey) {
     body.innerHTML = '<div class="msg-loading">Memuat pesan...</div>';
     loadMessageBody(i, msg);
@@ -842,7 +931,7 @@ function fallbackCopy(text) {
 }
 
 // ==============================================================================
-// HEALTH CHECK (diperbaiki agar selalu online jika request berhasil)
+// HEALTH CHECK
 // ==============================================================================
 function checkHealth() {
   var el = document.getElementById('headerStatus');
@@ -852,10 +941,33 @@ function checkHealth() {
       if (el) { el.textContent = 'online'; el.classList.remove('offline'); }
     })
     .catch(function() {
-      // fallback: tetap online agar tampilan tidak mengganggu
       if (el) { el.textContent = 'online'; el.classList.remove('offline'); }
     });
 }
+
+// ==============================================================================
+// POPSTATE (back/forward browser)
+// ==============================================================================
+window.addEventListener('popstate', function() {
+  var parsed = parseUrlPath();
+  if (parsed && parsed.name && isValidName(parsed.name)) {
+    if (!emails.find(function(e) { return e.name === parsed.name; })) {
+      emails.push({ name: parsed.name, createdAt: Date.now(), lastCheck: null });
+      saveToStorage();
+    }
+    openInbox(parsed.name, { skipUrlUpdate: true });
+    if (parsed.code) pendingCode = parsed.code;
+  } else {
+    // Kembali ke halaman mail kosong
+    activeEmail = null;
+    stopAutoRefresh();
+    document.getElementById('inboxHeader').style.display = 'none';
+    document.getElementById('inboxStatus').style.display = 'none';
+    document.getElementById('messages').innerHTML =
+      '<div class="inbox-empty"><div class="inbox-empty-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div><div class="inbox-empty-text">Pilih email untuk lihat pesan</div></div>';
+    renderEmailList();
+  }
+});
 
 // ==============================================================================
 // INIT
@@ -865,6 +977,7 @@ document.addEventListener('DOMContentLoaded', function() {
   if (input) input.addEventListener('keypress', function(e) { if (e.key === 'Enter') addEmail(); });
   loadFromStorage();
   renderEmailList();
+  handleUrlRouting();
   checkHealth();
   setInterval(checkHealth, 60000);
 });
