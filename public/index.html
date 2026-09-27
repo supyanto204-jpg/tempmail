@@ -901,16 +901,9 @@ function fallbackCopy(text) {
 // HEALTH CHECK
 // ==============================================================================
 function checkHealth() {
-  fetch('/api/health')
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      var el = document.getElementById('headerStatus');
-      if (el) el.textContent = 'online';
-    })
-    .catch(function() {
-      var el = document.getElementById('headerStatus');
-      if (el) el.textContent = 'offline';
-    });
+  // Skip — gak butuh health check, cukup fetchInbox yang handle
+  var el = document.getElementById('headerStatus');
+  if (el) el.textContent = 'online';
 }
 
 // ==============================================================================
