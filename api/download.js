@@ -1,5 +1,6 @@
 // ==============================================================================
-// api/download.js — Universal Downloader (Multi-Fallback)
+// api/download.js — Universal Video + Audio Downloader
+// Support: TikTok, YouTube, Instagram, X/Twitter, Reddit, Facebook, +1000 situs
 // ==============================================================================
 const axios = require('axios');
 
@@ -22,10 +23,7 @@ module.exports = async (req, res) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-
-    if (req.method === 'OPTIONS') {
-        return res.status(200).end();
-    }
+    if (req.method === 'OPTIONS') return res.status(200).end();
 
     try {
         const { url } = req.query;
@@ -34,31 +32,34 @@ module.exports = async (req, res) => {
         const platform = detectPlatform(url);
         console.log(`[DL] ${platform} → ${url}`);
 
-        let result;
+        let result = null;
+        let lastError = null;
 
+        // Coba platform-specific handler dulu
         try {
-            if (platform === 'tiktok') {
-                result = await downloadTikTok(url);
-            } else if (platform === 'youtube') {
-                result = await downloadYouTube(url);
-            } else if (platform === 'instagram') {
-                result = await downloadInstagram(url);
-            } else if (platform === 'twitter') {
-                result = await downloadTwitter(url);
-            } else if (platform === 'reddit') {
-                result = await downloadReddit(url);
-            } else if (platform === 'facebook') {
-                result = await downloadFacebook(url);
-            } else {
-                result = await downloadCobalt(url);
-            }
-        } catch (err) {
-            console.log('Primary gagal, coba cobalt:', err.message);
-            result = await downloadCobalt(url);
+            if (platform === 'tiktok') result = await videoTikTok(url);
+            else if (platform === 'youtube') result = await videoYouTube(url);
+            else if (platform === 'reddit') result = await videoReddit(url);
+            else if (platform === 'instagram') result = await videoInstagram(url);
+            else if (platform === 'twitter') result = await videoTwitter(url);
+            else if (platform === 'facebook') result = await videoFacebook(url);
+        } catch (e) {
+            console.log('Primary handler gagal:', e.message);
+            lastError = e;
         }
 
+        // Fallback ke cobalt universal
         if (!result) {
-            throw new Error('Gagal download. Coba URL lain atau platform lain.');
+            try {
+                result = await videoCobalt(url);
+            } catch (e) {
+                console.log('Cobalt fallback gagal:', e.message);
+                lastError = e;
+            }
+        }
+
+        if (!result || !result.links || result.links.length === 0) {
+            throw lastError || new Error('Gagal download. Coba URL lain.');
         }
 
         res.json(result);
@@ -85,133 +86,119 @@ function detectPlatform(url) {
 }
 
 // ==============================================================================
-// TIKTOK — tikwm.com + fallback
+// TIKTOK — video + audio
 // ==============================================================================
-async function downloadTikTok(url) {
-    // Coba tikwm.com
-    try {
-        const api = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
-        const r = await httpClient.get(api);
-        const data = r.data;
+async function videoTikTok(url) {
+    const api = `https://www.tikwm.com/api/?url=${encodeURIComponent(url)}&hd=1`;
+    const r = await httpClient.get(api);
+    const data = r.data;
 
-        if (data && data.code === 0 && data.data) {
-            const d = data.data;
-            const links = [];
-
-            if (d.hdplay) links.push({ label: 'Video HD (No Watermark)', url: d.hdplay, type: 'MP4' });
-            if (d.play && d.play !== d.hdplay) links.push({ label: 'Video SD', url: d.play, type: 'MP4' });
-            if (d.wmplay) links.push({ label: 'Video (Watermark)', url: d.wmplay, type: 'MP4' });
-            if (d.music) links.push({ label: 'Audio Only', url: d.music, type: 'MP3' });
-
-            return {
-                title: d.title || 'TikTok Video',
-                author: d.author?.nickname ? '@' + d.author.nickname : '',
-                thumbnail: d.cover || d.origin_cover || '',
-                duration: d.duration ? d.duration + 's' : '',
-                video: d.hdplay || d.play || '',
-                audio: d.music || '',
-                links: links
-            };
-        }
-    } catch (e) {
-        console.log('tikwm gagal:', e.message);
+    if (!data || data.code !== 0 || !data.data) {
+        throw new Error(data?.msg || 'Gagal ambil TikTok');
     }
 
-    // Fallback: cobalt
-    return await downloadCobalt(url);
+    const d = data.data;
+    const links = [];
+
+    if (d.hdplay) links.push({ label: 'Video HD (No Watermark)', url: d.hdplay, type: 'MP4' });
+    if (d.play && d.play !== d.hdplay) links.push({ label: 'Video SD', url: d.play, type: 'MP4' });
+    if (d.wmplay) links.push({ label: 'Video (Watermark)', url: d.wmplay, type: 'MP4' });
+    if (d.music) links.push({ label: 'Audio Only', url: d.music, type: 'MP3' });
+
+    return {
+        title: d.title || 'TikTok Video',
+        author: d.author?.nickname ? '@' + d.author.nickname : '',
+        thumbnail: d.cover || d.origin_cover || '',
+        duration: d.duration ? d.duration + 's' : '',
+        video: d.hdplay || d.play || '',
+        audio: d.music || '',
+        links: links
+    };
 }
 
 // ==============================================================================
-// YOUTUBE — cobalt instances
+// YOUTUBE — video + audio via cobalt
 // ==============================================================================
-async function downloadYouTube(url) {
+async function videoYouTube(url) {
     const instances = [
-        { url: 'https://co.wuk.sh/api/json', body: { url: url, vQuality: '720', isAudioOnly: false, aFormat: 'mp3' } },
-        { url: 'https://api.cobalt.tools/api/json', body: { url: url, vQuality: '720', isAudioOnly: false } },
-        { url: 'https://cobalt-api.kwiatekmiki.com/', body: { url: url, videoQuality: '720' } }
+        { url: 'https://co.wuk.sh/api/json', body: { url, vQuality: '720', isAudioOnly: false, aFormat: 'mp3' } },
+        { url: 'https://api.cobalt.tools/api/json', body: { url, vQuality: '720', isAudioOnly: false, aFormat: 'mp3' } },
+        { url: 'https://cobalt-api.kwiatekmiki.com/', body: { url, videoQuality: '720' } }
     ];
 
     for (const inst of instances) {
         try {
-            console.log(`Coba YouTube via ${inst.url}`);
+            console.log(`YouTube via ${inst.url}`);
             const r = await httpClient.post(inst.url, inst.body, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
             });
-
             const data = r.data;
-            console.log('Response:', JSON.stringify(data).substring(0, 200));
 
             if (data.status === 'stream' || data.status === 'redirect') {
                 return {
                     title: data.filename || 'YouTube Video',
-                    links: [{ label: 'Download Video', url: data.url, type: 'MP4' }]
+                    links: [{ label: 'Video (MP4)', url: data.url, type: 'MP4' }]
                 };
             }
 
             if (data.status === 'picker' && Array.isArray(data.picker)) {
-                return {
-                    title: 'YouTube Video',
-                    links: data.picker.map(function(p) {
-                        return { label: p.type || 'Download', url: p.url, type: (p.type || '').toUpperCase() };
-                    })
-                };
+                const links = data.picker.map(p => ({
+                    label: p.type || 'Download',
+                    url: p.url,
+                    type: (p.type || '').toUpperCase()
+                }));
+                return { title: 'YouTube Video', links };
             }
 
             if (data.url) {
                 return {
                     title: 'YouTube Video',
-                    links: [{ label: 'Download Video', url: data.url, type: 'MP4' }]
+                    links: [{ label: 'Video (MP4)', url: data.url, type: 'MP4' }]
                 };
             }
         } catch (e) {
             console.log(`Cobalt ${inst.url} gagal:`, e.message);
-            continue;
         }
     }
-
-    throw new Error('Semua server YouTube gagal. Coba lagi nanti.');
+    throw new Error('Semua server YouTube gagal');
 }
 
 // ==============================================================================
-// INSTAGRAM
+// INSTAGRAM — via cobalt
 // ==============================================================================
-async function downloadInstagram(url) {
-    // Coba via douyin.wtf
+async function videoInstagram(url) {
+    // Coba douyin.wtf dulu
     try {
         const api = `https://api.douyin.wtf/api/hybrid/video_data?url=${encodeURIComponent(url)}&minimal=true`;
         const r = await httpClient.get(api);
-        if (r.data && r.data.data) {
+        if (r.data && r.data.data && r.data.data.url) {
             const d = r.data.data;
-            if (d.url) {
-                return {
-                    title: d.desc || 'Instagram Media',
-                    thumbnail: d.cover || '',
-                    links: [{ label: 'Download', url: d.url, type: 'MP4' }]
-                };
-            }
+            return {
+                title: d.desc || 'Instagram Media',
+                author: d.author?.nickname || '',
+                thumbnail: d.cover || '',
+                links: [{ label: 'Video (MP4)', url: d.url, type: 'MP4' }]
+            };
         }
     } catch (e) {
         console.log('IG douyin.wtf gagal:', e.message);
     }
 
-    // Fallback: cobalt
-    return await downloadCobalt(url);
+    // Fallback cobalt
+    return await videoCobalt(url);
 }
 
 // ==============================================================================
-// TWITTER / X
+// TWITTER / X — via cobalt
 // ==============================================================================
-async function downloadTwitter(url) {
-    return await downloadCobalt(url);
+async function videoTwitter(url) {
+    return await videoCobalt(url);
 }
 
 // ==============================================================================
-// REDDIT
+// REDDIT — video direct
 // ==============================================================================
-async function downloadReddit(url) {
+async function videoReddit(url) {
     try {
         const jsonUrl = url.replace(/\/$/, '') + '.json';
         const r = await httpClient.get(jsonUrl, {
@@ -225,15 +212,16 @@ async function downloadReddit(url) {
                     title: post.title || 'Reddit Video',
                     author: post.author ? 'u/' + post.author : '',
                     thumbnail: post.thumbnail || '',
-                    links: [{ label: 'Video', url: post.media.reddit_video.fallback_url, type: 'MP4' }]
+                    links: [{ label: 'Video (MP4)', url: post.media.reddit_video.fallback_url, type: 'MP4' }]
                 };
             }
-            if (post.url && /\.(jpg|jpeg|png|gif|mp4|webm)$/i.test(post.url)) {
+
+            if (post.url && /\.(mp4|webm)$/i.test(post.url)) {
                 return {
-                    title: post.title || 'Reddit Media',
+                    title: post.title || 'Reddit Video',
                     author: post.author ? 'u/' + post.author : '',
                     thumbnail: post.thumbnail || '',
-                    links: [{ label: 'Media', url: post.url, type: 'FILE' }]
+                    links: [{ label: 'Video', url: post.url, type: 'MP4' }]
                 };
             }
         }
@@ -241,65 +229,60 @@ async function downloadReddit(url) {
         console.log('Reddit gagal:', e.message);
     }
 
-    return await downloadCobalt(url);
+    throw new Error('Reddit video gak tersedia');
 }
 
 // ==============================================================================
-// FACEBOOK
+// FACEBOOK — via cobalt
 // ==============================================================================
-async function downloadFacebook(url) {
-    return await downloadCobalt(url);
+async function videoFacebook(url) {
+    return await videoCobalt(url);
 }
 
 // ==============================================================================
-// COBALT UNIVERSAL — last resort
+// COBALT UNIVERSAL — fallback semua platform
 // ==============================================================================
-async function downloadCobalt(url) {
+async function videoCobalt(url) {
     const instances = [
-        { url: 'https://co.wuk.sh/api/json', body: { url: url, isAudioOnly: false, vQuality: '720' } },
-        { url: 'https://api.cobalt.tools/api/json', body: { url: url, isAudioOnly: false } },
-        { url: 'https://cobalt-api.kwiatekmiki.com/', body: { url: url } }
+        { url: 'https://co.wuk.sh/api/json', body: { url, isAudioOnly: false, vQuality: '720' } },
+        { url: 'https://api.cobalt.tools/api/json', body: { url, isAudioOnly: false } },
+        { url: 'https://cobalt-api.kwiatekmiki.com/', body: { url } }
     ];
 
     for (const inst of instances) {
         try {
-            console.log(`Coba cobalt via ${inst.url}`);
+            console.log(`Cobalt via ${inst.url}`);
             const r = await httpClient.post(inst.url, inst.body, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
             });
-
             const data = r.data;
 
             if (data.status === 'stream' || data.status === 'redirect') {
                 return {
                     title: data.filename || 'Media',
-                    links: [{ label: 'Download', url: data.url, type: 'MP4' }]
+                    links: [{ label: 'Video (MP4)', url: data.url, type: 'MP4' }]
                 };
             }
 
             if (data.status === 'picker' && Array.isArray(data.picker)) {
-                return {
-                    title: 'Media',
-                    links: data.picker.map(function(p) {
-                        return { label: p.type || 'Download', url: p.url, type: (p.type || '').toUpperCase() };
-                    })
-                };
+                const links = data.picker.map(p => ({
+                    label: p.type || 'Download',
+                    url: p.url,
+                    type: (p.type || '').toUpperCase()
+                }));
+                return { title: 'Media', links };
             }
 
             if (data.url) {
                 return {
                     title: 'Media',
-                    links: [{ label: 'Download', url: data.url, type: 'MP4' }]
+                    links: [{ label: 'Video (MP4)', url: data.url, type: 'MP4' }]
                 };
             }
         } catch (e) {
             console.log(`Cobalt ${inst.url} gagal:`, e.message);
-            continue;
         }
     }
 
-    throw new Error('Semua server downloader gagal. Coba lagi nanti.');
+    throw new Error('Semua server gagal');
 }
