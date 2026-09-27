@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Downloader</title>
+<title>TikTok Downloader</title>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
@@ -18,7 +18,8 @@
     --text-tertiary: #737373;
     --accent: #ffffff;
     --accent-hover: #e5e5e5;
-    --blue: #3b82f6;
+    --pink: #fe2c55;
+    --cyan: #25f4ee;
     --green: #22c55e;
     --red: #ef4444;
     --radius-sm: 6px;
@@ -98,12 +99,45 @@
 
   /* ============ CONTAINER ============ */
   .container {
-    max-width: 720px;
+    max-width: 640px;
     margin: 0 auto;
-    padding: 64px 32px 120px;
+    padding: 80px 32px 120px;
   }
   @media (max-width: 600px) {
-    .container { padding: 40px 20px 80px; }
+    .container { padding: 48px 20px 80px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .hero-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, var(--cyan) 0%, var(--pink) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 12px 40px rgba(254, 44, 85, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-icon::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent);
+  }
+  .hero-icon svg {
+    width: 32px;
+    height: 32px;
+    color: #ffffff;
+    position: relative;
+    z-index: 1;
   }
 
   h1 {
@@ -114,8 +148,9 @@
   }
   .subtitle {
     color: var(--text-secondary);
-    margin-bottom: 32px;
     font-size: 14px;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   /* ============ INPUT ============ */
@@ -123,13 +158,13 @@
     background: var(--bg-elev);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 20px;
+    padding: 16px;
     margin-bottom: 24px;
   }
+
   .input-wrap {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
   }
   @media (max-width: 600px) {
     .input-wrap { flex-direction: column; }
@@ -137,7 +172,7 @@
 
   input[type="url"] {
     flex: 1;
-    padding: 11px 14px;
+    padding: 12px 16px;
     background: var(--bg);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
@@ -151,7 +186,7 @@
   input[type="url"]::placeholder { color: var(--text-tertiary); }
 
   .btn {
-    padding: 11px 20px;
+    padding: 12px 20px;
     background: var(--accent);
     color: var(--bg);
     border: none;
@@ -165,26 +200,27 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
+    gap: 8px;
   }
   .btn:hover { background: var(--accent-hover); }
   .btn:active { transform: scale(0.97); }
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn svg { width: 14px; height: 14px; }
 
-  .platforms {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-  }
-  .platform {
-    font-size: 11px;
+  /* ============ QUICK HELP ============ */
+  .help-text {
+    font-size: 12px;
     color: var(--text-tertiary);
-    padding: 4px 10px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 100px;
+    margin-top: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
     font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  .help-text svg {
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
   }
 
   /* ============ RESULT ============ */
@@ -193,10 +229,15 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 20px;
-    margin-top: 16px;
     display: none;
+    animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
   .result.show { display: block; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
 
   .result-header {
     display: flex;
@@ -212,6 +253,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    min-width: 0;
+    flex: 1;
   }
   .result-title svg {
     width: 16px;
@@ -220,13 +263,11 @@
     flex-shrink: 0;
   }
   .result-title-text {
-    font-size: 13px;
-    color: var(--text-secondary);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    max-width: 400px;
     font-weight: 500;
+    color: var(--text);
   }
   .result-status {
     font-size: 11px;
@@ -238,6 +279,30 @@
     background: var(--bg);
     border-radius: 4px;
     flex-shrink: 0;
+  }
+
+  /* ============ AUTHOR INFO ============ */
+  .author-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+  .author-info svg {
+    width: 14px;
+    height: 14px;
+    color: var(--text-tertiary);
+    flex-shrink: 0;
+  }
+  .author-info-sep {
+    color: var(--text-tertiary);
   }
 
   /* ============ DOWNLOAD BUTTONS ============ */
@@ -267,9 +332,7 @@
     border-color: var(--border-strong);
     background: var(--bg-elev-2);
   }
-  .download-btn:active {
-    transform: scale(0.99);
-  }
+  .download-btn:active { transform: scale(0.99); }
 
   .download-btn-label {
     display: flex;
@@ -303,14 +366,9 @@
     letter-spacing: 0.03em;
     flex-shrink: 0;
   }
-
   .download-btn-badge.mp4 { color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
   .download-btn-badge.mp3 { color: #a78bfa; background: rgba(167, 139, 250, 0.1); }
   .download-btn-badge.img { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
-  .download-btn-badge.apk { color: #34d399; background: rgba(52, 211, 153, 0.1); }
-  .download-btn-badge.pdf { color: #fb923c; background: rgba(251, 146, 60, 0.1); }
-  .download-btn-badge.zip { color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
-  .download-btn-badge.file { color: var(--text-secondary); }
 
   .download-btn-arrow {
     width: 16px;
@@ -333,6 +391,7 @@
     padding: 40px 20px;
     color: var(--text-tertiary);
     font-size: 13px;
+    font-family: 'SF Mono', 'Monaco', monospace;
   }
   .spinner {
     width: 16px;
@@ -362,19 +421,7 @@
     flex-shrink: 0;
     margin-top: 1px;
   }
-  .error-box-content { flex: 1; min-width: 0; }
-  .error-box-content pre {
-    margin-top: 8px;
-    font-size: 11px;
-    background: rgba(0,0,0,0.3);
-    padding: 8px;
-    border-radius: 4px;
-    overflow-x: auto;
-    white-space: pre-wrap;
-    word-break: break-all;
-    font-family: 'SF Mono', 'Monaco', monospace;
-    color: var(--text-secondary);
-  }
+  .error-box-content { flex: 1; min-width: 0; line-height: 1.5; }
 
   /* ============ TOAST ============ */
   .toast {
@@ -398,6 +445,12 @@
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.error { color: var(--red); border-color: var(--red); }
   .toast.success { color: var(--green); border-color: var(--green); }
+
+  /* ============ SCROLLBAR ============ */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--border-strong); }
 </style>
 </head>
 <body>
@@ -441,12 +494,20 @@
 </nav>
 
 <div class="container">
-  <h1>Downloader</h1>
-  <p class="subtitle">Paste link apapun — video, foto, audio, APK, dokumen.</p>
+
+  <div class="hero">
+    <div class="hero-icon">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+      </svg>
+    </div>
+    <h1>TikTok Downloader</h1>
+    <p class="subtitle">Paste link TikTok, download video tanpa watermark.</p>
+  </div>
 
   <div class="input-card">
     <div class="input-wrap">
-      <input type="url" id="urlInput" placeholder="https://..." autocomplete="off">
+      <input type="url" id="urlInput" placeholder="https://vt.tiktok.com/..." autocomplete="off">
       <button class="btn" id="dlBtn" onclick="startDownload()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -456,16 +517,13 @@
         Ambil
       </button>
     </div>
-    <div class="platforms">
-      <span class="platform">TikTok</span>
-      <span class="platform">YouTube</span>
-      <span class="platform">Instagram</span>
-      <span class="platform">X</span>
-      <span class="platform">Reddit</span>
-      <span class="platform">Pinterest</span>
-      <span class="platform">APK</span>
-      <span class="platform">PDF</span>
-      <span class="platform">Any URL</span>
+    <div class="help-text">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="16" x2="12" y2="12"/>
+        <line x1="12" y1="8" x2="12.01" y2="8"/>
+      </svg>
+      Support: video, foto slideshow, audio
     </div>
   </div>
 
@@ -481,19 +539,17 @@
 var isDownloading = false;
 
 // ==============================================================================
-// ICON SVG MAP
+// ICONS
 // ==============================================================================
 var ICONS = {
   video: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>',
   audio: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>',
   image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-  apk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>',
-  pdf: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-  zip: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 8v13H3V8"/><path d="M1 3h22v5H1z"/><path d="M10 12h4"/></svg>',
-  file: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>',
   arrow: '<svg class="download-btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
   check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
-  error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>'
+  error: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+  user: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>'
 };
 
 // ==============================================================================
@@ -511,6 +567,13 @@ function showToast(msg, type) {
 }
 
 // ==============================================================================
+// VALIDASI URL TIKTOK
+// ==============================================================================
+function isTikTokUrl(url) {
+  return /tiktok\.com|vt\.tiktok|vm\.tiktok/i.test(url);
+}
+
+// ==============================================================================
 // START DOWNLOAD
 // ==============================================================================
 function startDownload() {
@@ -520,12 +583,16 @@ function startDownload() {
   var url = input.value.trim();
 
   if (!url) {
-    showToast('Masukkan URL dulu', 'error');
+    showToast('Masukkan URL TikTok dulu', 'error');
     input.focus();
     return;
   }
   if (!/^https?:\/\//i.test(url)) {
     showToast('URL harus mulai dengan http:// atau https://', 'error');
+    return;
+  }
+  if (!isTikTokUrl(url)) {
+    showToast('Harus link TikTok', 'error');
     return;
   }
 
@@ -536,16 +603,13 @@ function startDownload() {
 
   var result = document.getElementById('result');
   result.classList.add('show');
-  result.innerHTML = '<div class="loading-state"><div class="spinner"></div>Mengambil data...</div>';
+  result.innerHTML = '<div class="loading-state"><div class="spinner"></div>Mengambil data TikTok...</div>';
 
   fetch('/api/download?url=' + encodeURIComponent(url))
     .then(function(r) { return r.json(); })
     .then(function(data) {
-      if (data.error) {
-        showError(data.error);
-      } else {
-        renderResult(data, url);
-      }
+      if (data.error) showError(data.error);
+      else renderResult(data);
     })
     .catch(function(err) {
       showError(err.message);
@@ -560,20 +624,35 @@ function startDownload() {
 // ==============================================================================
 // RENDER RESULT
 // ==============================================================================
-function renderResult(data, url) {
+function renderResult(data) {
   var result = document.getElementById('result');
-  var platform = detectPlatform(url);
-
   var html = '';
 
   // Header
   html += '<div class="result-header">';
   html += '<div class="result-title">';
   html += ICONS.check;
-  html += '<span class="result-title-text">' + escapeHtml(data.title || 'Media') + '</span>';
+  html += '<span class="result-title-text">' + escapeHtml(data.title || 'TikTok Video') + '</span>';
   html += '</div>';
-  html += '<div class="result-status">' + platform + '</div>';
+  html += '<div class="result-status">TIKTOK</div>';
   html += '</div>';
+
+  // Author info
+  if (data.author || data.duration) {
+    html += '<div class="author-info">';
+    if (data.author) {
+      html += ICONS.user;
+      html += '<span>' + escapeHtml(data.author) + '</span>';
+    }
+    if (data.author && data.duration) {
+      html += '<span class="author-info-sep">·</span>';
+    }
+    if (data.duration) {
+      html += ICONS.clock;
+      html += '<span>' + escapeHtml(data.duration) + '</span>';
+    }
+    html += '</div>';
+  }
 
   // Download buttons
   var links = data.links || [];
@@ -581,7 +660,7 @@ function renderResult(data, url) {
   if (links.length === 0) {
     html += '<div class="error-box">';
     html += ICONS.error;
-    html += '<div class="error-box-content">Gak ada link download yang tersedia.</div>';
+    html += '<div class="error-box-content">Gak ada link download.</div>';
     html += '</div>';
   } else {
     html += '<div class="download-links">';
@@ -603,7 +682,7 @@ function renderDownloadButton(l) {
   var badgeClass = type.toLowerCase();
 
   var html = '';
-  html += '<a class="download-btn" href="' + escapeAttr(l.url) + '" target="_blank" rel="noopener" download>';
+  html += '<a class="download-btn" href="' + escapeAttr(l.url) + '" target="_blank" rel="noopener">';
   html += '<span class="download-btn-label">';
   html += icon;
   html += '<span class="download-btn-text">' + escapeHtml(l.label || 'Download') + '</span>';
@@ -620,15 +699,10 @@ function renderDownloadButton(l) {
 // ==============================================================================
 function getIconForType(type) {
   type = (type || '').toUpperCase();
-
-  if (type === 'MP4' || type === 'MKV' || type === 'WEBM' || type === 'MOV') return ICONS.video;
-  if (type === 'MP3' || type === 'M4A' || type === 'WAV' || type === 'FLAC' || type === 'AUDIO') return ICONS.audio;
-  if (type === 'IMG' || type === 'JPG' || type === 'PNG' || type === 'GIF' || type === 'WEBP') return ICONS.image;
-  if (type === 'APK') return ICONS.apk;
-  if (type === 'PDF' || type === 'DOC' || type === 'DOCX') return ICONS.pdf;
-  if (type === 'ZIP' || type === 'RAR' || type === '7Z') return ICONS.zip;
-
-  return ICONS.file;
+  if (type === 'MP4' || type === 'VIDEO') return ICONS.video;
+  if (type === 'MP3' || type === 'AUDIO') return ICONS.audio;
+  if (type === 'IMG' || type === 'JPG' || type === 'PNG') return ICONS.image;
+  return ICONS.video;
 }
 
 // ==============================================================================
@@ -648,33 +722,10 @@ function showError(msg) {
 
   html += '<div class="error-box">';
   html += ICONS.error;
-  html += '<div class="error-box-content">';
-  html += escapeHtml(msg);
-  html += '</div>';
+  html += '<div class="error-box-content">' + escapeHtml(msg) + '</div>';
   html += '</div>';
 
   result.innerHTML = html;
-}
-
-// ==============================================================================
-// DETECT PLATFORM (buat badge)
-// ==============================================================================
-function detectPlatform(url) {
-  if (!url) return 'LINK';
-  if (/tiktok\.com|vt\.tiktok|vm\.tiktok/i.test(url)) return 'TIKTOK';
-  if (/youtube\.com|youtu\.be/i.test(url)) return 'YOUTUBE';
-  if (/instagram\.com/i.test(url)) return 'INSTAGRAM';
-  if (/twitter\.com|x\.com/i.test(url)) return 'X';
-  if (/reddit\.com|redd\.it/i.test(url)) return 'REDDIT';
-  if (/facebook\.com|fb\.watch/i.test(url)) return 'FACEBOOK';
-  if (/pinterest\.com|pin\.it/i.test(url)) return 'PINTEREST';
-  if (/\.apk(\?|$)/i.test(url)) return 'APK';
-  if (/\.pdf(\?|$)/i.test(url)) return 'PDF';
-  if (/\.(zip|rar|7z)(\?|$)/i.test(url)) return 'ARCHIVE';
-  if (/\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(url)) return 'IMAGE';
-  if (/\.(mp3|wav|m4a|flac)(\?|$)/i.test(url)) return 'AUDIO';
-  if (/\.(mp4|mkv|webm|mov)(\?|$)/i.test(url)) return 'VIDEO';
-  return 'LINK';
 }
 
 // ==============================================================================
