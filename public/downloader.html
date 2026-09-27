@@ -22,38 +22,30 @@
     --cyan: #25f4ee;
     --green: #22c55e;
     --red: #ef4444;
+    --yellow: #fbbf24;
     --radius-sm: 6px;
     --radius-md: 8px;
     --radius-lg: 12px;
   }
 
   html, body {
-    background: var(--bg);
-    color: var(--text);
+    background: var(--bg); color: var(--text);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    font-size: 14px;
-    line-height: 1.5;
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-    letter-spacing: -0.01em;
+    font-size: 14px; line-height: 1.5; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
   }
 
-  /* NAVBAR */
   .navbar {
     position: sticky; top: 0; z-index: 100;
     background: rgba(10, 10, 10, 0.8);
     backdrop-filter: saturate(180%) blur(12px);
-    -webkit-backdrop-filter: saturate(180%) blur(12px);
     border-bottom: 1px solid var(--border);
   }
   .navbar-inner {
     max-width: 1120px; margin: 0 auto; padding: 0 32px; height: 56px;
     display: flex; align-items: center; justify-content: space-between; gap: 24px;
   }
-  .brand {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 14px; font-weight: 600;
-  }
+  .brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
   .brand-logo { width: 24px; height: 24px; }
   .nav-links { display: flex; gap: 4px; }
   .nav-links a {
@@ -72,11 +64,9 @@
     .nav-links a { padding: 6px 10px; font-size: 12px; }
   }
 
-  /* CONTAINER */
   .container { max-width: 680px; margin: 0 auto; padding: 64px 32px 120px; }
   @media (max-width: 600px) { .container { padding: 40px 20px 80px; } }
 
-  /* HERO */
   .hero { text-align: center; margin-bottom: 40px; }
   .hero-icon {
     width: 64px; height: 64px; margin: 0 auto 20px;
@@ -95,7 +85,6 @@
   h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.03em; margin-bottom: 8px; }
   .subtitle { color: var(--text-secondary); font-size: 14px; max-width: 400px; margin: 0 auto; }
 
-  /* INPUT */
   .input-card {
     background: var(--bg-elev); border: 1px solid var(--border);
     border-radius: var(--radius-lg); padding: 16px; margin-bottom: 24px;
@@ -126,7 +115,6 @@
   .btn:disabled { opacity: 0.5; cursor: not-allowed; }
   .btn svg { width: 14px; height: 14px; }
 
-  /* HELP */
   .help-text {
     font-size: 12px; color: var(--text-tertiary);
     margin-top: 12px; display: flex; align-items: center; gap: 6px;
@@ -134,7 +122,6 @@
   }
   .help-text svg { width: 12px; height: 12px; flex-shrink: 0; }
 
-  /* RESULT */
   .result {
     background: var(--bg-elev); border: 1px solid var(--border);
     border-radius: var(--radius-lg); padding: 20px;
@@ -159,7 +146,7 @@
   .result-title svg { width: 16px; height: 16px; color: var(--green); flex-shrink: 0; }
   .result-title-text {
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-    font-weight: 500; color: var(--text);
+    font-weight: 500;
   }
   .result-status {
     font-size: 11px; color: var(--text-tertiary);
@@ -169,7 +156,6 @@
     flex-shrink: 0;
   }
 
-  /* AUTHOR INFO */
   .author-info {
     display: flex; align-items: center; gap: 10px;
     padding: 12px; background: var(--bg);
@@ -181,7 +167,6 @@
   .author-info svg { width: 14px; height: 14px; color: var(--text-tertiary); flex-shrink: 0; }
   .author-info-sep { color: var(--text-tertiary); }
 
-  /* DOWNLOAD LINKS */
   .download-links { display: flex; flex-direction: column; gap: 8px; }
 
   .download-btn {
@@ -193,10 +178,7 @@
     font-size: 13px; transition: all 0.15s; gap: 12px;
     cursor: pointer; font-family: inherit;
   }
-  .download-btn:hover {
-    border-color: var(--border-strong);
-    background: var(--bg-elev-2);
-  }
+  .download-btn:hover { border-color: var(--border-strong); background: var(--bg-elev-2); }
   .download-btn:active { transform: scale(0.99); }
 
   .download-btn-label {
@@ -217,16 +199,14 @@
   .download-btn-badge.mp4 { color: #60a5fa; background: rgba(59, 130, 246, 0.1); }
   .download-btn-badge.mp3 { color: #a78bfa; background: rgba(167, 139, 250, 0.1); }
   .download-btn-badge.img { color: #f472b6; background: rgba(244, 114, 182, 0.1); }
+  .download-btn-badge.enhanced { color: var(--green); background: rgba(34, 197, 94, 0.1); }
 
   .download-btn-arrow {
     width: 16px; height: 16px;
     color: var(--text-tertiary); transition: all 0.15s; flex-shrink: 0;
   }
-  .download-btn:hover .download-btn-arrow {
-    color: var(--text); transform: translateX(2px);
-  }
+  .download-btn:hover .download-btn-arrow { color: var(--text); transform: translateX(2px); }
 
-  /* ENHANCE PANEL */
   .enhance-panel {
     margin-top: 16px; padding: 16px;
     background: var(--bg); border: 1px solid var(--border);
@@ -240,7 +220,7 @@
     font-size: 13px; font-weight: 600;
     display: flex; align-items: center; gap: 8px;
   }
-  .enhance-title svg { width: 16px; height: 16px; color: #fbbf24; }
+  .enhance-title svg { width: 16px; height: 16px; color: var(--yellow); }
 
   .switch {
     position: relative; width: 40px; height: 22px;
@@ -258,8 +238,7 @@
   .switch.on::after { left: 20px; }
 
   .enhance-options {
-    display: none;
-    flex-direction: column; gap: 8px;
+    display: none; flex-direction: column; gap: 8px;
     margin-top: 12px; padding-top: 12px;
     border-top: 1px solid var(--border);
   }
@@ -267,49 +246,34 @@
 
   .enhance-option {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px;
-    background: var(--bg-elev);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    cursor: pointer;
-    transition: all 0.15s;
+    padding: 8px 12px; background: var(--bg-elev);
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    font-size: 12px; cursor: pointer; transition: all 0.15s;
   }
   .enhance-option:hover { border-color: var(--border-strong); }
   .enhance-option-label {
     display: flex; align-items: center; gap: 8px;
     color: var(--text-secondary);
-    font-family: 'SF Mono', 'Monaco', monospace;
   }
-  .enhance-option-label span:last-child { color: var(--text); font-family: inherit; }
+  .enhance-option-label span:last-child { color: var(--text); }
 
   .checkbox {
     width: 18px; height: 18px;
     border: 2px solid var(--border-strong);
     border-radius: 4px;
     display: flex; align-items: center; justify-content: center;
-    transition: all 0.15s;
-    flex-shrink: 0;
+    transition: all 0.15s; flex-shrink: 0;
   }
-  .enhance-option.on .checkbox {
-    background: var(--green); border-color: var(--green);
-  }
-  .enhance-option .checkbox svg {
-    width: 12px; height: 12px;
-    color: #fff; opacity: 0;
-    transition: opacity 0.15s;
-  }
+  .enhance-option.on .checkbox { background: var(--green); border-color: var(--green); }
+  .enhance-option .checkbox svg { width: 12px; height: 12px; color: #fff; opacity: 0; transition: opacity 0.15s; }
   .enhance-option.on .checkbox svg { opacity: 1; }
 
   .enhance-apply {
-    margin-top: 12px;
-    padding: 12px;
+    margin-top: 12px; padding: 12px;
     background: linear-gradient(135deg, var(--pink) 0%, var(--cyan) 100%);
-    color: #000; border: none;
-    border-radius: var(--radius-md);
+    color: #000; border: none; border-radius: var(--radius-md);
     font-weight: 600; font-size: 13px;
-    cursor: pointer; transition: all 0.15s;
-    font-family: inherit;
+    cursor: pointer; transition: all 0.15s; font-family: inherit;
     display: flex; align-items: center; justify-content: center; gap: 8px;
   }
   .enhance-apply:hover { opacity: 0.9; }
@@ -317,7 +281,6 @@
   .enhance-apply:disabled { opacity: 0.5; cursor: not-allowed; }
   .enhance-apply svg { width: 14px; height: 14px; }
 
-  /* LOADING */
   .loading-state {
     display: flex; align-items: center; justify-content: center;
     gap: 12px; padding: 40px 20px;
@@ -333,10 +296,8 @@
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* ERROR */
   .error-box {
-    padding: 14px;
-    background: rgba(239, 68, 68, 0.08);
+    padding: 14px; background: rgba(239, 68, 68, 0.08);
     border: 1px solid rgba(239, 68, 68, 0.3);
     border-radius: var(--radius-md);
     color: #fca5a5; font-size: 13px;
@@ -345,25 +306,20 @@
   .error-box svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
   .error-box-content { flex: 1; min-width: 0; line-height: 1.5; }
 
-  /* TOAST */
   .toast {
     position: fixed; bottom: 24px; right: 24px;
-    background: var(--bg-elev-2);
-    border: 1px solid var(--border-strong);
-    color: var(--text);
-    padding: 12px 16px;
+    background: var(--bg-elev-2); border: 1px solid var(--border-strong);
+    color: var(--text); padding: 12px 16px;
     border-radius: var(--radius-md);
     font-size: 13px; font-weight: 500;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
     opacity: 0; transform: translateY(12px);
-    transition: all 0.2s; pointer-events: none;
-    z-index: 1000;
+    transition: all 0.2s; pointer-events: none; z-index: 1000;
   }
   .toast.show { opacity: 1; transform: translateY(0); }
   .toast.error { color: var(--red); border-color: var(--red); }
   .toast.success { color: var(--green); border-color: var(--green); }
 
-  /* SCROLLBAR */
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
@@ -384,28 +340,9 @@
       Panel
     </div>
     <div class="nav-links">
-      <a href="/">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
-        Home
-      </a>
-      <a href="/mail.html">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="2" y="4" width="20" height="16" rx="2"/>
-          <path d="m22 7-10 5L2 7"/>
-        </svg>
-        Mail
-      </a>
-      <a href="/downloader.html" class="active">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7 10 12 15 17 10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
-        </svg>
-        Downloader
-      </a>
+      <a href="/">Home</a>
+      <a href="/mail.html">Mail</a>
+      <a href="/downloader.html" class="active">Downloader</a>
     </div>
   </div>
 </nav>
@@ -418,7 +355,7 @@
       </svg>
     </div>
     <h1>TikTok Downloader</h1>
-    <p class="subtitle">Paste link TikTok, download video HD atau foto dengan enhancement.</p>
+    <p class="subtitle">Paste link TikTok, download HD atau enhance dengan AI.</p>
   </div>
 
   <div class="input-card">
@@ -439,7 +376,7 @@
         <line x1="12" y1="16" x2="12" y2="12"/>
         <line x1="12" y1="8" x2="12.01" y2="8"/>
       </svg>
-      Support: video HD, foto slideshow, audio
+      Video HD, foto slideshow, audio, enhance
     </div>
   </div>
 
@@ -449,6 +386,16 @@
 <div class="toast" id="toast"></div>
 
 <script>
+// ==============================================================================
+// ⚠️ CONFIG — GANTI DENGAN URL PANEL LU
+// ==============================================================================
+var PANEL_URL = 'https://panel-lu.pterodactyl.io'; // ganti!
+var PANEL_API_KEY = ''; // kosongin kalau gak butuh auth
+
+// Kalau panel gak punya HTTPS, atau lu mau pakai Vercel proxy, kosongin PANEL_URL
+// nanti otomatis pakai /api/enhance (Vercel)
+var USE_VERCEL_PROXY = false; // true = lewat Vercel, false = langsung ke panel
+
 // ==============================================================================
 // STATE
 // ==============================================================================
@@ -479,9 +426,7 @@ function showToast(msg, type) {
   toast.textContent = msg;
   toast.className = 'toast show' + (type ? ' ' + type : '');
   clearTimeout(toast._t);
-  toast._t = setTimeout(function() {
-    toast.className = 'toast' + (type ? ' ' + type : '');
-  }, 2500);
+  toast._t = setTimeout(function() { toast.className = 'toast' + (type ? ' ' + type : ''); }, 2500);
 }
 
 // ==============================================================================
@@ -489,12 +434,11 @@ function showToast(msg, type) {
 // ==============================================================================
 function startDownload() {
   if (isDownloading) return;
-
   var input = document.getElementById('urlInput');
   var url = input.value.trim();
 
   if (!url) { showToast('Masukkan URL TikTok dulu', 'error'); input.focus(); return; }
-  if (!/^https?:\/\//i.test(url)) { showToast('URL harus mulai dengan http:// atau https://', 'error'); return; }
+  if (!/^https?:\/\//i.test(url)) { showToast('URL harus mulai dengan http://', 'error'); return; }
   if (!/tiktok\.com|vt\.tiktok|vm\.tiktok/i.test(url)) { showToast('Harus link TikTok', 'error'); return; }
 
   isDownloading = true;
@@ -510,10 +454,7 @@ function startDownload() {
     .then(function(r) { return r.json(); })
     .then(function(data) {
       if (data.error) showError(data.error);
-      else {
-        currentData = data;
-        renderResult(data);
-      }
+      else { currentData = data; renderResult(data); }
     })
     .catch(function(err) { showError(err.message); })
     .finally(function() {
@@ -530,25 +471,19 @@ function renderResult(data) {
   var result = document.getElementById('result');
   var html = '';
 
-  // Header
   html += '<div class="result-header">';
-  html += '<div class="result-title">';
-  html += ICONS.check;
-  html += '<span class="result-title-text">' + escapeHtml(data.title || 'TikTok Media') + '</span>';
-  html += '</div>';
+  html += '<div class="result-title">' + ICONS.check + '<span class="result-title-text">' + escapeHtml(data.title || 'TikTok Media') + '</span></div>';
   html += '<div class="result-status">' + (data.isPhotoPost ? 'SLIDESHOW' : 'VIDEO') + '</div>';
   html += '</div>';
 
-  // Author info
   if (data.author || data.duration) {
     html += '<div class="author-info">';
-    if (data.author) { html += ICONS.user + '<span>' + escapeHtml(data.author) + '</span>'; }
+    if (data.author) html += ICONS.user + '<span>' + escapeHtml(data.author) + '</span>';
     if (data.author && data.duration) html += '<span class="author-info-sep">·</span>';
-    if (data.duration) { html += ICONS.clock + '<span>' + escapeHtml(data.duration) + '</span>'; }
+    if (data.duration) html += ICONS.clock + '<span>' + escapeHtml(data.duration) + '</span>';
     html += '</div>';
   }
 
-  // Download links
   var links = data.links || [];
   if (links.length === 0) {
     html += '<div class="error-box">' + ICONS.error + '<div class="error-box-content">Gak ada link download.</div></div>';
@@ -558,65 +493,47 @@ function renderResult(data) {
     html += '</div>';
   }
 
-  // Enhance panel (kalau ada video atau foto)
   var mediaUrl = data.isPhotoPost ? (data.imageUrls[0] || null) : data.videoUrl;
   var mediaType = data.isPhotoPost ? 'photo' : 'video';
 
-  if (mediaUrl) {
-    html += renderEnhancePanel(mediaUrl, mediaType);
-  }
+  if (mediaUrl) html += renderEnhancePanel(mediaUrl, mediaType);
 
   result.innerHTML = html;
-
-  // Setup event listener enhance
   setupEnhanceHandlers();
 }
 
-// ==============================================================================
-// RENDER DOWNLOAD BUTTON
-// ==============================================================================
 function renderDownloadButton(l) {
   var type = (l.type || 'FILE').toUpperCase();
   var icon = getIconForType(type);
-  var badgeClass = type.toLowerCase();
-
   return '<a class="download-btn" href="' + escapeAttr(l.url) + '" target="_blank" rel="noopener">' +
-    '<span class="download-btn-label">' + icon +
-    '<span class="download-btn-text">' + escapeHtml(l.label || 'Download') + '</span></span>' +
-    '<span class="download-btn-badge ' + badgeClass + '">' + escapeHtml(type) + '</span>' +
-    ICONS.arrow +
-    '</a>';
+    '<span class="download-btn-label">' + icon + '<span class="download-btn-text">' + escapeHtml(l.label || 'Download') + '</span></span>' +
+    '<span class="download-btn-badge ' + type.toLowerCase() + '">' + escapeHtml(type) + '</span>' +
+    ICONS.arrow + '</a>';
 }
 
-// ==============================================================================
-// RENDER ENHANCE PANEL
-// ==============================================================================
 function renderEnhancePanel(mediaUrl, mediaType) {
   var isVideo = mediaType === 'video';
-
   var html = '';
   html += '<div class="enhance-panel">';
   html += '<div class="enhance-header">';
   html += '<div class="enhance-title">' + ICONS.sparkle + 'Enhance ' + (isVideo ? 'Video' : 'Foto') + '</div>';
   html += '<div class="switch" id="enhanceSwitch" onclick="toggleEnhance()"></div>';
   html += '</div>';
-
   html += '<div class="enhance-options" id="enhanceOptions">';
 
-  // Options
   var opts = isVideo
     ? [
-        { id: 'upscale', label: 'Upscale 2x', desc: 'Perbesar resolusi pake Lanczos', default: true },
-        { id: 'sharpen', label: 'Sharpen', desc: 'Pertajam detail', default: true },
-        { id: 'denoise', label: 'Denoise', desc: 'Kurangi noise', default: false },
-        { id: 'fps60', label: 'FPS 60', desc: 'Interpolate ke 60 FPS', default: false },
-        { id: 'hdr', label: 'HDR Tone', desc: 'Tone mapping HDR', default: false }
+        { id: 'upscale', label: 'Upscale 2x', default: true },
+        { id: 'sharpen', label: 'Sharpen', default: true },
+        { id: 'denoise', label: 'Denoise', default: false },
+        { id: 'fps60', label: 'FPS 60', default: false },
+        { id: 'hdr', label: 'HDR Tone', default: false }
       ]
     : [
-        { id: 'upscale', label: 'Upscale 2x', desc: 'Perbesar resolusi', default: true },
-        { id: 'sharpen', label: 'Sharpen', desc: 'Pertajam detail', default: true },
-        { id: 'denoise', label: 'Denoise', desc: 'Kurangi noise', default: true },
-        { id: 'hdr', label: 'HDR Tone', desc: 'Tone mapping HDR', default: false }
+        { id: 'upscale', label: 'Upscale 2x', default: true },
+        { id: 'sharpen', label: 'Sharpen', default: true },
+        { id: 'denoise', label: 'Denoise', default: true },
+        { id: 'hdr', label: 'HDR Tone', default: false }
       ];
 
   opts.forEach(function(o) {
@@ -627,29 +544,17 @@ function renderEnhancePanel(mediaUrl, mediaType) {
   });
 
   html += '<button class="enhance-apply" id="enhanceApply" onclick="applyEnhance(\'' + escapeAttr(mediaUrl) + '\', \'' + mediaType + '\')">';
-  html += ICONS.sparkle;
-  html += 'Enhance Sekarang';
-  html += '</button>';
-
-  html += '</div>';
-  html += '</div>';
-
+  html += ICONS.sparkle + 'Enhance Sekarang</button>';
+  html += '</div></div>';
   return html;
 }
 
-// ==============================================================================
-// TOGGLE ENHANCE PANEL
-// ==============================================================================
 function toggleEnhance() {
-  var sw = document.getElementById('enhanceSwitch');
-  var opts = document.getElementById('enhanceOptions');
-  sw.classList.toggle('on');
-  opts.classList.toggle('show');
+  document.getElementById('enhanceSwitch').classList.toggle('on');
+  document.getElementById('enhanceOptions').classList.toggle('show');
 }
 
-function toggleOption(el) {
-  el.classList.toggle('on');
-}
+function toggleOption(el) { el.classList.toggle('on'); }
 
 // ==============================================================================
 // APPLY ENHANCE
@@ -659,25 +564,34 @@ function applyEnhance(mediaUrl, mediaType) {
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div>Processing...';
 
-  // Kumpulin opsi
   var options = {};
   document.querySelectorAll('.enhance-option').forEach(function(el) {
-    var key = el.getAttribute('data-option');
-    options[key] = el.classList.contains('on');
+    options[el.getAttribute('data-option')] = el.classList.contains('on');
   });
 
-  // Tampilin progress
   var result = document.getElementById('result');
   var progressId = 'enhance-progress-' + Date.now();
   result.insertAdjacentHTML('beforeend',
     '<div id="' + progressId + '" style="margin-top:16px;padding:16px;background:#111;border:1px solid #262626;border-radius:12px;">' +
-    '<div class="loading-state"><div class="spinner"></div>Enhancing... (bisa 1-5 menit tergantung size)</div>' +
-    '</div>'
+    '<div class="loading-state"><div class="spinner"></div>Enhancing... (bisa 1-5 menit)</div></div>'
   );
 
-  fetch('/api/enhance', {
+  // Tentukan URL endpoint
+  var enhanceEndpoint;
+  if (USE_VERCEL_PROXY) {
+    enhanceEndpoint = '/api/enhance'; // lewat Vercel
+  } else {
+    enhanceEndpoint = PANEL_URL + '/api/enhance'; // langsung ke panel
+  }
+
+  console.log('[Enhance] Endpoint:', enhanceEndpoint);
+
+  fetch(enhanceEndpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-API-Key': PANEL_API_KEY
+    },
     body: JSON.stringify({ url: mediaUrl, type: mediaType, options: options })
   })
     .then(function(r) { return r.json(); })
@@ -686,10 +600,15 @@ function applyEnhance(mediaUrl, mediaType) {
       if (data.error) {
         el.innerHTML = '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(data.error) + '</div></div>';
       } else {
-        el.innerHTML = '<a class="download-btn" href="' + data.url + '" target="_blank" rel="noopener">' +
-          '<span class="download-btn-label">' + ICONS.check +
-          '<span class="download-btn-text">Download Enhanced</span></span>' +
-          '<span class="download-btn-badge" style="color:#22c55e;background:rgba(34,197,94,0.1)">ENHANCED</span>' +
+        // Kalau hasil dari panel, perlu prepend PANEL_URL
+        var downloadUrl = data.url;
+        if (!USE_VERCEL_PROXY && downloadUrl.startsWith('/')) {
+          downloadUrl = PANEL_URL + downloadUrl;
+        }
+
+        el.innerHTML = '<a class="download-btn" href="' + downloadUrl + '" target="_blank" rel="noopener">' +
+          '<span class="download-btn-label">' + ICONS.check + '<span class="download-btn-text">Download Enhanced</span></span>' +
+          '<span class="download-btn-badge enhanced">ENHANCED</span>' +
           ICONS.arrow + '</a>';
         showToast('Enhance berhasil!', 'success');
       }
@@ -704,58 +623,39 @@ function applyEnhance(mediaUrl, mediaType) {
     });
 }
 
-// ==============================================================================
-// SETUP ENHANCE HANDLERS
-// ==============================================================================
 function setupEnhanceHandlers() {
-  // Auto-open enhance panel kalau media ada
   var sw = document.getElementById('enhanceSwitch');
   if (sw) {
-    // Default: show options
     sw.classList.add('on');
     var opts = document.getElementById('enhanceOptions');
     if (opts) opts.classList.add('show');
   }
 }
 
-// ==============================================================================
-// ICON BASED ON TYPE
-// ==============================================================================
 function getIconForType(type) {
   type = (type || '').toUpperCase();
-  if (type === 'MP4' || type === 'VIDEO') return ICONS.video;
-  if (type === 'MP3' || type === 'AUDIO') return ICONS.audio;
-  if (type === 'IMG' || type === 'JPG' || type === 'PNG') return ICONS.image;
+  if (type === 'MP4') return ICONS.video;
+  if (type === 'MP3') return ICONS.audio;
+  if (type === 'IMG') return ICONS.image;
   return ICONS.video;
 }
 
-// ==============================================================================
-// SHOW ERROR
-// ==============================================================================
 function showError(msg) {
   var result = document.getElementById('result');
   result.classList.add('show');
-  result.innerHTML =
-    '<div class="result-header"><div class="result-title" style="color:#fca5a5;">' + ICONS.error + 'Gagal</div></div>' +
+  result.innerHTML = '<div class="result-header"><div class="result-title" style="color:#fca5a5;">' + ICONS.error + 'Gagal</div></div>' +
     '<div class="error-box">' + ICONS.error + '<div class="error-box-content">' + escapeHtml(msg) + '</div></div>';
 }
 
-// ==============================================================================
-// UTILS
-// ==============================================================================
 function escapeHtml(text) {
   if (!text) return '';
   return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
-
 function escapeAttr(text) {
   if (!text) return '';
   return String(text).replace(/"/g, '&quot;').replace(/'/g, '&#039;');
 }
 
-// ==============================================================================
-// INIT
-// ==============================================================================
 document.addEventListener('DOMContentLoaded', function() {
   var input = document.getElementById('urlInput');
   if (input) {
