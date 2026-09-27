@@ -1,4 +1,11 @@
 {
+  "redirects": [
+    { "source": "/mail.html", "destination": "/mail", "permanent": true },
+    { "source": "/main.html", "destination": "/mail", "permanent": true },
+    { "source": "/maill.html", "destination": "/mail", "permanent": true },
+    { "source": "/mail/", "destination": "/mail", "permanent": true },
+    { "source": "/downloader.html", "destination": "/downloader", "permanent": true }
+  ],
   "rewrites": [
     { "source": "/api/list", "destination": "/api/list" },
     { "source": "/api/html", "destination": "/api/html" },
