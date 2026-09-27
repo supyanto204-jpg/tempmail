@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Downloader</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --bg: #0a0a0a;
+    --bg-elev: #111111;
+    --bg-elev-2: #171717;
+    --border: #262626;
+    --border-strong: #404040;
+    --text: #ededed;
+    --text-secondary: #a3a3a3;
+    --text-tertiary: #737373;
+    --accent: #ffffff;
+    --accent-hover: #e5e5e5;
+    --blue: #3b82f6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+  }
+
+  html, body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px; line-height: 1.5; min-height: 100vh;
+    -webkit-font-smoothing: antialiased; letter-spacing: -0.01em;
+  }
+
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(10, 10, 10, 0.8);
+    backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .navbar-inner {
+    max-width: 1120px; margin: 0 auto; padding: 0 32px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 600; }
+  .brand-logo { width: 24px; height: 24px; color: var(--text); }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links a {
+    color: var(--text-secondary); text-decoration: none;
+    padding: 6px 12px; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500; transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .nav-links a:hover { color: var(--text); background: var(--bg-elev); }
+  .nav-links a.active { color: var(--text); background: var(--bg-elev-2); }
+  .nav-links .icon { width: 14px; height: 14px; }
+
+  @media (max-width: 600px) {
+    .navbar-inner { padding: 0 20px; height: 52px; }
+    .nav-links a { padding: 6px 10px; font-size: 12px; }
+  }
+
+  .container { max-width: 720px; margin: 0 auto; padding: 64px 32px 120px; }
+  @media (max-width: 600px) { .container { padding: 40px 20px 80px; } }
+
+  h1 {
+    font-size: 32px; font-weight: 600;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+  }
+  .subtitle { color: var(--text-secondary); margin-bottom: 32px; font-size: 14px; }
+
+  .input-card {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .input-wrap { display: flex; gap: 8px; margin-bottom: 16px; }
+  @media (max-width: 600px) { .input-wrap { flex-direction: column; } }
+
+  input[type="url"] {
+    flex: 1; padding: 11px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text);
+    font-size: 13px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+    outline: none; transition: border-color 0.15s;
+  }
+  input[type="url"]:focus { border-color: var(--border-strong); }
+  input[type="url"]::placeholder { color: var(--text-tertiary); }
+
+  .btn {
+    padding: 11px 20px;
+    background: var(--accent); color: var(--bg);
+    border: none; border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 600;
+    cursor: pointer; transition: all 0.15s;
+    white-space: nowrap; font-family: inherit;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn:hover { background: var(--accent-hover); }
+  .btn:active { transform: scale(0.97); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn svg { width: 14px; height: 14px; }
+
+  .platforms { display: flex; gap: 6px; flex-wrap: wrap; }
+  .platform {
+    font-size: 11px; color: var(--text-tertiary);
+    padding: 4px 10px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    font-family: 'SF Mono', 'Monaco', monospace;
+  }
+
+  .result {
+    background: var(--bg-elev);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-top: 16px;
+    display: none;
+  }
+  .result.show { display: block; }
+
+  .result-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .result-title { font-size: 14px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .result-title svg { width: 16px; height: 16px; color: var(--green); }
+  .result-status {
+    font-size: 11px; color: var(--text-tertiary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    background: var(--bg);
+    border-radius: 4px;
+  }
+
+  .result-preview { margin-bottom: 16px; }
+  .result-thumb {
+    width: 100%; border-radius: var(--radius-md);
+    background: var(--bg); display: block;
+    border: 1px solid var(--border);
+  }
+  .result-title-text {
+    margin-top: 12px; font-size: 14px; line-height: 1.5;
+    font-weight: 500;
+  }
+  .result-meta {
+    font-size: 12px; color: var(--text-tertiary);
+    margin-top: 4px;
+  }
+
+  .download-links { display: flex; flex-direction: column; gap: 6px; }
+  .download-link {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    text-decoration: none; color: var(--text);
+    font-size: 13px; transition: all 0.15s; gap: 12px;
+  }
+  .download-link:hover {
+    border-color: var(--border-strong);
+    background: var(--bg-elev-2);
+  }
+  .download-link-label { display: flex; align-items: center; gap: 10px; font-weight: 500; }
+  .download-link-label svg { width: 16px; height: 16px; color: var(--text-secondary); }
+  .download-link-badge {
+    font-size: 10px; padding: 2px 6px;
+    background: var(--bg-elev-2);
+    border-radius: 4px;
+    color: var(--text-tertiary);
+    font-family: 'SF Mono', 'Monaco', monospace;
+    font-weight: 500;
+  }
+
+  .loading-state {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; padding: 40px 20px;
+    color: var(--text-tertiary); font-size: 13px;
+  }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--border);
+    border-top-color: var(--text);
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .error-box {
+    padding: 14px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius-md);
+    color: #fca5a5;
+    font-size: 13px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .error-box svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--bg-elev-2);
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    padding: 12px 16px;
+    border-radius: var(--radius-md);
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.6);
+    opacity: 0; transform: translateY(12px);
+    transition: all 0.2s; pointer-events: none; z-index: 1000;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast.error { color: var(--red); border-color: var(--red); }
+  .toast.success { color: var(--green); border-color: var(--green); }
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="navbar-inner">
+    <div class="brand">
+      <svg class="brand-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7" rx="1"/>
+        <rect x="14" y="3" width="7" height="7" rx="1"/>
+        <rect x="3" y="14" width="7" height="7" rx="1"/>
+        <rect x="14" y="14" width="7" height="7" rx="1"/>
+      </svg>
+      Panel
+    </div>
+    <div class="nav-links">
+      <a href="/">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        Home
+      </a>
+      <a href="/mail.html">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="4" width="20" height="16" rx="2"/>
+          <path d="m22 7-10 5L2 7"/>
+        </svg>
+        Mail
+      </a>
+      <a href="/downloader.html" class="active">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Downloader
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+  <h1>Universal Downloader</h1>
+  <p class="subtitle">Paste link video, download langsung tanpa watermark.</p>
+
+  <div class="input-card">
+    <div class="input-wrap">
+      <input type="url" id="urlInput" placeholder="https://tiktok.com/..." autocomplete="off">
+      <button class="btn" id="dlBtn" onclick="startDownload()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+          <polyline points="7 10 12 15 17 10"/>
+          <line x1="12" y1="15" x2="12" y2="3"/>
+        </svg>
+        Download
+      </button>
+    </div>
+    <div class="platforms">
+      <span class="platform">TikTok</span>
+      <span class="platform">YouTube</span>
+      <span class="platform">Instagram</span>
+      <span class="platform">X</span>
+      <span class="platform">Reddit</span>
+    </div>
+  </div>
+
+  <div class="result" id="result"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var isDownloading = false;
+
+function showToast(msg, type) {
+  var toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.className = 'toast show' + (type ? ' ' + type : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(function() { toast.className = 'toast' + (type ? ' ' + type : ''); }, 2500);
+}
+
+function detectPlatform(url) {
+  if (!url) return 'unknown';
+  if (/tiktok\.com|vt\.tiktok|vm\.tiktok/i.test(url)) return 'tiktok';
+  if (/youtube\.com|youtu\.be/i.test(url)) return 'youtube';
+  if (/instagram\.com/i.test(url)) return 'instagram';
+  if (/twitter\.com|x\.com/i.test(url)) return 'twitter';
+  if (/reddit\.com/i.test(url)) return 'reddit';
+  if (/facebook\.com|fb\.watch/i.test(url)) return 'facebook';
+  return 'unknown';
+}
+
+function startDownload() {
+  if (isDownloading) return;
+  var input = document.getElementById('urlInput');
+  var url = input.value.trim();
+  if (!url) { showToast('Masukkan URL dulu', 'error'); input.focus(); return; }
+  if (!/^https?:\/\//i.test(url)) { showToast('URL harus mulai dengan http:// atau https://', 'error'); return; }
+
+  isDownloading = true;
+  var btn = document.getElementById('dlBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner"></div>Loading...';
+
+  var result = document.getElementById('result');
+  result.classList.add('show');
+  result.innerHTML = '<div class="loading-state"><div class="spinner"></div>Mengambil data...</div>';
+
+  fetch('/api/download?url=' + encodeURIComponent(url))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.error) showError(data.error);
+      else renderResult(data, url);
+    })
+    .catch(function(err) { showError(err.message); })
+    .finally(function() {
+      isDownloading = false;
+      btn.disabled = false;
+      btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download';
+    });
+}
+
+function renderResult(data, url) {
+  var result = document.getElementById('result');
+  var platform = detectPlatform(url);
+
+  var html = '';
+  html += '<div class="result-header">';
+  html += '<div class="result-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Berhasil</div>';
+  html += '<div class="result-status">' + platform + '</div>';
+  html += '</div>';
+
+  if (data.thumbnail || data.title) {
+    html += '<div class="result-preview">';
+    if (data.thumbnail) html += '<img class="result-thumb" src="' + escapeAttr(data.thumbnail) + '" onerror="this.style.display=\'none\'">';
+    if (data.title) html += '<div class="result-title-text">' + escapeHtml(data.title) + '</div>';
+    if (data.author || data.duration) {
+      html += '<div class="result-meta">';
+      if (data.author) html += escapeHtml(data.author);
+      if (data.duration) html += (data.author ? ' · ' : '') + escapeHtml(data.duration);
+      html += '</div>';
+    }
+    html += '</div>';
+  }
+
+  var links = [];
+  if (data.video) links.push({ url: data.video, label: 'Video', badge: 'MP4' });
+  if (data.audio) links.push({ url: data.audio, label: 'Audio', badge: 'MP3' });
+  if (data.image) links.push({ url: data.image, label: 'Gambar', badge: 'IMG' });
+  if (data.links && Array.isArray(data.links)) {
+    data.links.forEach(function(l) { links.push({ url: l.url, label: l.label || 'Download', badge: l.type || '' }); });
+  }
+
+  if (links.length > 0) {
+    html += '<div class="download-links">';
+    links.forEach(function(l) {
+      html += '<a class="download-link" href="' + escapeAttr(l.url) + '" target="_blank" rel="noopener">';
+      html += '<span class="download-link-label">';
+      html += '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+      html += escapeHtml(l.label);
+      html += '</span>';
+      if (l.badge) html += '<span class="download-link-badge">' + escapeHtml(l.badge) + '</span>';
+      html += '</a>';
+    });
+    html += '</div>';
+  } else {
+    html += '<div class="error-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div>Server gak ngasih link download. Coba URL lain.</div></div>';
+  }
+
+  result.innerHTML = html;
+}
+
+function showError(msg) {
+  var result = document.getElementById('result');
+  result.classList.add('show');
+  result.innerHTML =
+    '<div class="result-header"><div class="result-title">Gagal</div></div>' +
+    '<div class="error-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg><div>' + escapeHtml(msg) + '</div></div>';
+}
+
+function escapeHtml(text) {
+  if (!text) return '';
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function escapeAttr(text) {
+  if (!text) return '';
+  return String(text).replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var input = document.getElementById('urlInput');
+  input.addEventListener('keypress', function(e) { if (e.key === 'Enter') startDownload(); });
+  input.focus();
+});
+</script>
+</body>
+</html>
